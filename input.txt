@@ -1,0 +1,48 @@
+int main()
+{
+	short k = 1;
+
+	while (k == 1)
+	{
+		t = t << 2;
+		i = t >> 4;
+		p = t + i;
+	}
+
+	return 3;
+}
+
+long int k, g, h = 1 - 5;
+long short g = 3 - 2;
+
+
+
+short j = 4, k;
+float p ()
+{
+	;
+	while (k < 8)
+	{
+		k = 8 - j;
+		j = j + 2;
+
+		break;
+	}
+
+	return k;
+}
+
+long int t ()
+{
+	float a = -3 * 2 / k + (9 - j) - 7;
+	pr = p();
+}
+
+
+int main () {}
+
+float k() {}
+
+int d() {a = 2 * k + (3 / z);}
+
+int f = y;
