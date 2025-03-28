@@ -130,11 +130,13 @@
     <ClCompile Include="CC.cpp" />
     <ClCompile Include="LL1.cpp" />
     <ClCompile Include="Scanner.cpp" />
+    <ClCompile Include="Semant.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="defs.h" />
     <ClInclude Include="LL1.h" />
     <ClInclude Include="Scanner.h" />
+    <ClInclude Include="Semant.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

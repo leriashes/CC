@@ -14,13 +14,13 @@ LEX Keyword[MAX_KEYW] = { "int", "short", "long", "float",
 int IndexKeyword[MAX_KEYW] = { TInt, TShort, TLong, TFloat,
                                 TMain, TReturn, TWhile, TBreak };
 
-//РІРѕСЃСЃС‚Р°РЅРѕРІРёС‚СЊ СѓРєР°Р·Р°С‚РµР»СЊ
+//восстановить указатель
 void TScanner::PutUK(int i)
 {
     uk = i;
 }
 
-//Р·Р°РїРѕРјРЅРёС‚СЊ СѓРєР°Р·Р°С‚РµР»СЊ
+//запомнить указатель
 int TScanner::GetUK()
 {
     return uk;
@@ -52,41 +52,41 @@ int TScanner::GetPos()
     return pos;
 }
 
-//РІС‹РґР°С‚СЊ СЃРѕРѕР±С‰РµРЅРёРµ РѕР± РѕС€РёР±РєРµ
+//выдать сообщение об ошибке
 void TScanner::PrintError(const char* error, char* a)
 {
     if (a == nullptr || a[0] == '\0')
     {
-        printf("\n--- РћС€РёР±РєР°: %s. ---   РЎС‚СЂРѕРєР°: %d  РџРѕР·РёС†РёСЏ: %d\n", error, line, pos);
+        printf("\n--- Ошибка: %s. ---   Строка: %d  Позиция: %d\n", error, line, pos);
     }
     else
     {
-        printf("\n--- РћС€РёР±РєР°: %s. \'%s\' ---  РЎС‚СЂРѕРєР°: %d  РџРѕР·РёС†РёСЏ: %d\n", error, a, line, pos);
+        printf("\n--- Ошибка: %s. \'%s\' ---  Строка: %d  Позиция: %d\n", error, a, line, pos);
     }
 
     exit(0);
 }
 
-//РІС‹РґР°С‚СЊ СЃРѕРѕР±С‰РµРЅРёРµ РѕР± РѕС€РёР±РєРµ
+//выдать сообщение об ошибке
 void TScanner::PrintError(const char* error)
 {
-    printf("\n--- РћС€РёР±РєР°: %s. ---    РЎС‚СЂРѕРєР°: %d  РџРѕР·РёС†РёСЏ: %d\n", error, line, pos);
+    printf("\n--- Ошибка: %s. ---    Строка: %d  Позиция: %d\n", error, line, pos);
 
     exit(0);
 }
 
 int TScanner::Scanner(LEX lex)
 {
-    int i;          //С‚РµРєСѓС‰Р°СЏ РґР»РёРЅР° Р»РµРєСЃРµРјС‹
+    int i;          //текущая длина лексемы
 
-    for (i = 0; i < MAX_LEX; i++) lex[i] = 0;    //РѕС‡РёСЃС‚РєР° РїРѕР»СЏ Р»РµРєСЃРµРјС‹
+    for (i = 0; i < MAX_LEX; i++) lex[i] = 0;    //очистка поля лексемы
 
     i = 0;
 
 
 start:
-    //РІСЃРµ РёРіРЅРѕСЂРёСЂСѓРµРјС‹Рµ СЌР»РµРјРµРЅС‚С‹:
-    while (text[uk] == ' ' || text[uk] == '\n' || text[uk] == '\t')       //РїСЂРѕРїСѓСЃРє РЅРµР·РЅР°С‡Р°С‰РёС… СЌР»РµРјРµРЅС‚РѕРІ
+    //все игнорируемые элементы:
+    while (text[uk] == ' ' || text[uk] == '\n' || text[uk] == '\t')       //пропуск незначащих элементов
     {
         if (text[uk] == ' ' || text[uk] == '\t')
         {
@@ -101,7 +101,7 @@ start:
     }
 
 
-    if (text[uk] == '/' && text[uk + 1] == '/')			//РЅР°С‡Р°Р»СЃСЏ РѕРґРЅРѕСЃС‚СЂРѕС‡РЅС‹Р№ РєРѕРјРјРµРЅС‚Р°СЂРёР№, РЅСѓР¶РЅРѕ РїСЂРѕРїСѓСЃС‚РёС‚СЊ С‚РµРєСЃС‚ РґРѕ '\n'
+    if (text[uk] == '/' && text[uk + 1] == '/')			//начался однострочный комментарий, нужно пропустить текст до '\n'
     {
         uk += 2;
         pos += 2;
@@ -117,7 +117,7 @@ start:
         goto start;
     }
 
-    if (text[uk] == '/' && text[uk + 1] == '*')			//РЅР°С‡Р°Р»СЃСЏ РјРЅРѕРіРѕСЃС‚СЂРѕС‡РЅС‹Р№ РєРѕРјРјРµРЅС‚Р°СЂРёР№, РЅСѓР¶РЅРѕ РїСЂРѕРїСѓСЃС‚РёС‚СЊ С‚РµРєСЃС‚ РґРѕ "*/"
+    if (text[uk] == '/' && text[uk + 1] == '*')			//начался многострочный комментарий, нужно пропустить текст до "*/"
     {
         uk += 2;
         pos += 2;
@@ -166,7 +166,7 @@ start:
 
         if (i == MAX_CONST + 1)
         {
-            PrintError("РЎР»РёС€РєРѕРј РґР»РёРЅРЅР°СЏ РєРѕРЅСЃС‚Р°РЅС‚Р°", lex);
+            PrintError("Слишком длинная константа", lex);
             return TError;
         }
 
@@ -180,7 +180,7 @@ start:
 
         return TConstInt;
     }
-    else if (text[uk] >= 'a' && text[uk] <= 'z' || text[uk] >= 'A' && text[uk] <= 'Z')			//РЅР°С‡РёРЅР°РµС‚СЃСЏ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ 
+    else if (text[uk] >= 'a' && text[uk] <= 'z' || text[uk] >= 'A' && text[uk] <= 'Z')			//начинается идентификатор 
     {
         lex[i++] = text[uk++];
         pos++;
@@ -341,7 +341,7 @@ start:
     {
         lex[i++] = text[uk++];
         pos++;
-        PrintError("РќРµРІРµСЂРЅС‹Р№ СЃРёРјРІРѕР»", lex);
+        PrintError("Неверный символ", lex);
         return TError;
     }
 
@@ -358,7 +358,7 @@ N1:
 
     if (i == MAX_CONST + 2)
     {
-        PrintError("РЎР»РёС€РєРѕРј РґР»РёРЅРЅР°СЏ РєРѕРЅСЃС‚Р°РЅС‚Р°", lex);
+        PrintError("Слишком длинная константа", lex);
         return TError;
     }
 
@@ -372,7 +372,7 @@ void TScanner::GetData(char* FileName)
 
     if (!file.is_open())
     {
-        PrintError("РћС‚СЃСѓС‚СЃС‚РІСѓРµС‚ РІС…РѕРґРЅРѕР№ С„Р°Р№Р»", nullptr);
+        PrintError("Отсутствует входной файл", nullptr);
         exit(1);
     }
     else
@@ -385,7 +385,7 @@ void TScanner::GetData(char* FileName)
             if (!file.eof()) text[i++] = symb;
             if (i >= MAX_TEXT - 1)
             {
-                PrintError("РЎР»РёС€РєРѕРј Р±РѕР»СЊС€РѕР№ СЂР°Р·РјРµСЂ РёСЃС…РѕРґРЅРѕРіРѕ РјРѕРґСѓР»СЏ", nullptr);
+                PrintError("Слишком большой размер исходного модуля", nullptr);
                 break;
             }
         }

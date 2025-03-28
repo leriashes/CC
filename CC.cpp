@@ -27,6 +27,9 @@ int main(int argc, char* argv[])
         printf("\n\nОшибки не найдены.\n\n");
     }
 
+    printf("\n\n\nСЕМАНТИЧЕСКОЕ ДЕРЕВО\n\n");
+    gram->PrintTree();
+
     delete scan;
     delete gram;
 

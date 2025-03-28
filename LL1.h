@@ -1,5 +1,6 @@
 #pragma once
 #include "Scanner.h"
+#include "Semant.h"
 
 class LL1
 {
@@ -11,7 +12,10 @@ private:
 
 public:
 	static TScanner* scan;
+	Tree* root;
 
 	LL1(TScanner* scan);
+	~LL1();
 	int LL_1();
+	void PrintTree();
 };

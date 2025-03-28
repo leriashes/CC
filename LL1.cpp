@@ -2,6 +2,7 @@
 
 TScanner* LL1::scan = (TScanner*)NULL;
 
+
 void LL1::epsilon()	//обработка правила с пустой правой частью
 {
 	;
@@ -10,10 +11,14 @@ void LL1::epsilon()	//обработка правила с пустой прав
 int LL1::LL_1() //функция синтаксического анализатора
 {
 	int t, fl = 1;
-	LEX l;
+	LEX lex, prevLex;
+	DATA_TYPE semType;
+	Tree* v = nullptr, * ident;
 
 	mag[z] = neterm_S;
-	t = scan->Scanner(l);
+	Tree* level[100];
+	int l = 0;
+	t = scan->Scanner(lex);
 
 	while (fl)
 	{
@@ -27,21 +32,23 @@ int LL1::LL_1() //функция синтаксического анализат
 				}
 				else
 				{
-					t = scan->Scanner(l);
+					memcpy(prevLex, lex, strlen(lex) + 1);
+					t = scan->Scanner(lex);
 				}
 			}
 			else
 			{
-				scan->PrintError("Неверный символ", l);
+				scan->PrintError("Неверный символ", lex);
 				return -1;
 			}
 		}
-		else	//в верхушке магазина нетерминал
+		else	//в верхушке магазина нетерминал или операционный символ
 		{
 			switch (mag[z])
 			{
 			case neterm_S:
 				// S -> T O S | eps
+				// S -> T startDecl O endDecl S | eps
 				if (t == TEnd)
 				{
 					mag[z++] = TEnd;
@@ -49,7 +56,9 @@ int LL1::LL_1() //функция синтаксического анализат
 				else
 				{
 					mag[z++] = neterm_S;
+					mag[z++] = sem_endDecl;
 					mag[z++] = neterm_O;
+					mag[z++] = sem_startDecl;
 					mag[z++] = neterm_T;
 				}
 
@@ -135,34 +144,44 @@ int LL1::LL_1() //функция синтаксического анализат
 
 			case neterm_E:
 				// E -> = V | eps
+				// E -> setIdent = V matchLeft | setIdent
 				if (t == TSave)
 				{
-					mag[z++] = neterm_V;
+					mag[z++] = sem_matchLeft;
+					mag[z++] = neterm_V; 
 					mag[z++] = TSave;
+					mag[z++] = sem_setIdent;
 				}
 				else
 				{
-					epsilon();
+					mag[z++] = sem_setIdent;
 				}
 
 				break;
 
 			case neterm_F:
 				// F -> ( ) Q
+				// F -> setFunct ( ) Q returnLevel
+				mag[z++] = sem_returnLevel;
 				mag[z++] = neterm_Q;
 				mag[z++] = TRS;
 				mag[z++] = TLS;
+				mag[z++] = sem_setFunct;
 				break;
 
 			case neterm_Q:
 				// Q -> { U }
+				// Q -> { setNewLevel U } returnLevel
+				mag[z++] = sem_returnLevel;
 				mag[z++] = TFRS;
 				mag[z++] = neterm_U;
+				mag[z++] = sem_setNewLevel;
 				mag[z++] = TFLS;
 				break;
 
 			case neterm_U:
 				// U -> T a X ; U | A U | eps
+				// U -> T startDecl a X ; endDecl U | A U | eps
 				if (t == TFRS)
 				{
 					epsilon();
@@ -170,9 +189,11 @@ int LL1::LL_1() //функция синтаксического анализат
 				else if (t == TInt || t == TShort || t == TLong || t == TFloat)
 				{
 					mag[z++] = neterm_U;
+					mag[z++] = sem_endDecl;
 					mag[z++] = TSemicolon;
 					mag[z++] = neterm_X;
 					mag[z++] = TIdent;
+					mag[z++] = sem_startDecl;
 					mag[z++] = neterm_T;
 				}
 				else
@@ -185,11 +206,13 @@ int LL1::LL_1() //функция синтаксического анализат
 
 			case neterm_A:
 				// A -> a P ; | Q | W | ; | R ; | B ; | main ( ) ;
+				// A -> a getType P ; | Q | W | ; | R ; | B ; | main ( ) ;
 				switch (t)
 				{
 				case TIdent:
 					mag[z++] = TSemicolon;
 					mag[z++] = neterm_P;
+					mag[z++] = sem_getType;
 					mag[z++] = TIdent;
 					break;
 
@@ -226,6 +249,8 @@ int LL1::LL_1() //функция синтаксического анализат
 
 			case neterm_R:
 				// R -> return V
+				// R -> return V matchLeft
+				mag[z++] = sem_matchLeft;
 				mag[z++] = neterm_V;
 				mag[z++] = TReturn;
 				break;
@@ -246,8 +271,10 @@ int LL1::LL_1() //функция синтаксического анализат
 
 			case neterm_P:
 				// P -> = V | ( )
+				// P -> = V matchLeft | ( )
 				if (t == TSave)
 				{
+					mag[z++] = sem_matchLeft;
 					mag[z++] = neterm_V;
 					mag[z++] = TSave;
 				}
@@ -267,9 +294,11 @@ int LL1::LL_1() //функция синтаксического анализат
 
 			case neterm_V1:
 				// V1 -> == Z V1 | != Z V1 | eps
+				// V1 -> == Z matchLeft V1 | != Z matchLeft V1 | eps
 				if (t == TEq || t == TNEq)
 				{
 					mag[z++] = neterm_V1;
+					mag[z++] = sem_matchLeft;
 					mag[z++] = neterm_Z;
 					mag[z++] = t;
 				}
@@ -288,9 +317,11 @@ int LL1::LL_1() //функция синтаксического анализат
 
 			case neterm_Z1:
 				// Z1 -> < Y Z1 | <= Y Z1 | > Y Z1 | >= Y Z1 | eps
+				// Z1 -> < Y matchLeft Z1 | <= Y matchLeft Z1 | > Y matchLeft Z1 | >= Y matchLeft Z1 | eps
 				if (t == TLT || t == TGT || t == TLE || t == TGE)
 				{
 					mag[z++] = neterm_V1;
+					mag[z++] = sem_matchLeft;
 					mag[z++] = neterm_Z;
 					mag[z++] = t;
 				}
@@ -309,9 +340,11 @@ int LL1::LL_1() //функция синтаксического анализат
 
 			case neterm_Y1:
 				// Y1 -> << L Y1 | >> L Y1 | eps
+				// Y1 -> << L matchLeft Y1 | >> L matchLeft Y1 | eps
 				if (t == TLShift || t == TRShift)
 				{
 					mag[z++] = neterm_Y1;
+					mag[z++] = sem_matchLeft;
 					mag[z++] = neterm_L;
 					mag[z++] = t;
 				}
@@ -330,9 +363,11 @@ int LL1::LL_1() //функция синтаксического анализат
 
 			case neterm_L1:
 				// L1 -> + M L1 | - M L1 | eps
+				// L1 -> + M matchLeft L1 | - M matchLeft L1 | eps
 				if (t == TPlus || t == TMinus)
 				{
 					mag[z++] = neterm_L1;
+					mag[z++] = sem_matchLeft;
 					mag[z++] = neterm_M;
 					mag[z++] = t;
 				}
@@ -351,9 +386,11 @@ int LL1::LL_1() //функция синтаксического анализат
 
 			case neterm_M1:
 				// M1 -> * N M1 | / N M1 | % N M1 | eps
+				// M1 -> * N matchLeft M1 | / N matchLeft M1 | % N matchLeft M1 | eps
 				if (t == TMult || t == TDiv || t == TMod)
 				{
 					mag[z++] = neterm_M1;
+					mag[z++] = sem_matchLeft;
 					mag[z++] = neterm_N;
 					mag[z++] = t;
 				}
@@ -377,9 +414,11 @@ int LL1::LL_1() //функция синтаксического анализат
 
 			case neterm_J:
 				// J -> a K | C | ( V ) | main ( )
+				// J -> a getType K | C | ( V ) | main ( )
 				if (t == TIdent)
 				{
 					mag[z++] = neterm_K;
+					mag[z++] = sem_getType;
 					mag[z++] = TIdent;
 				}
 				else if (t == TMain)
@@ -427,6 +466,39 @@ int LL1::LL_1() //функция синтаксического анализат
 				}
 
 				break;
+
+
+			case sem_endDecl:
+				break;
+
+			case sem_getType:
+				ident = root->SemGetVar(prevLex);
+				break;
+
+			case sem_matchLeft:
+				break;
+
+			case sem_startDecl:
+				semType = root->GetTypebyLex(mag[z + 1]);
+				break;
+
+			case sem_setIdent:
+				root->SemInclude(prevLex, ObjVar, semType);
+				break;
+
+			case sem_setFunct:
+				v = root->SemInclude(prevLex, ObjFunct, semType);
+				level[l++] = v;
+				break;
+
+			case sem_returnLevel:
+				root->SetCur(level[--l]);
+				break;
+
+			case sem_setNewLevel:
+				v = root->SemNewLevel();
+				level[l++] = v;
+				break;
 			}
 		}
 
@@ -436,8 +508,20 @@ int LL1::LL_1() //функция синтаксического анализат
 	return 1;
 }
 
+void LL1::PrintTree()
+{
+	root->Print();
+}
+
 LL1::LL1(TScanner* scan)
 {
 	this->scan = scan;
+	this->root = new Tree(scan);
 	z = 0;
+}
+
+LL1::~LL1()
+{
+	root->CleanTree();
+	delete root;
 }
