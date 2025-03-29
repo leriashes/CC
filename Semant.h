@@ -75,12 +75,11 @@ public:
 	Tree* SemInclude(LEX a, OBJ_TYPE ot, DATA_TYPE t);		//занесение идентификатора a в таблицу с типом t
 	Tree* SemInclude(Tree* first);
 	Tree* SemNewLevel();			//новый уровень (для составного оператора)
+	Tree* SemReturnLevel();
 	Tree* SemGetVar(LEX a);		//найти в таблице переменную с именем a и вернуть ссылку на соответсвующий элемент дерева
 	Tree* SemGetFunct(LEX a);		//найти в таблице функцию с именем a и вернуть ссылку на соответсвующий элемент дерева
 	int DupControl(Tree* addr, LEX a);			//проверка идентификатора a на повторное описание внутри блока
 
-	void TypeCasting(NData* firstData, NData secondData, int operation, LEX operationName);
-	NData TypeCastingAssign(DATA_TYPE firstType, NData secondData);
 	void CheckTypeInt(DATA_TYPE type);
 
 	DATA_TYPE GetType();

@@ -1,6 +1,6 @@
 #pragma once
 #include "Scanner.h"
-#include "Semant.h"
+#include "Translate.h"
 
 class LL1
 {
@@ -12,7 +12,7 @@ private:
 
 public:
 	static TScanner* scan;
-	Tree* root;
+	Translate* translate;
 
 	LL1(TScanner* scan);
 	~LL1();
