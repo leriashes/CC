@@ -6,9 +6,21 @@ short fun()
 	int i;
 }
 
-int im()
+int j()
 {
 	long n;
-{float a, b;}
-{int a, c;}
+	{float a, b;}
+	
+	
+	while (n < 0)
+	{
+		int i;
+
+		{short i;}
+	}
+	
+	main();
+	return 2;
+
+	
 }

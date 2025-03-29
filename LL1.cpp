@@ -200,13 +200,12 @@ int LL1::LL_1() //функция синтаксического анализат
 
 			case neterm_A:
 				// A -> a P ; | Q | W | ; | R ; | B ; | main ( ) ;
-				// A -> a getType P ; | Q | W | ; | R ; | B ; | main ( ) ;
+				// A -> a P ; | Q | W | ; | R ; | B ; | main getFunct ( ) ;
 				switch (t)
 				{
 				case TIdent:
 					mag[z++] = TSemicolon;
 					mag[z++] = neterm_P;
-					mag[z++] = sem_getType;
 					mag[z++] = TIdent;
 					break;
 
@@ -236,6 +235,7 @@ int LL1::LL_1() //функция синтаксического анализат
 					mag[z++] = TSemicolon;
 					mag[z++] = TRS;
 					mag[z++] = TLS;
+					mag[z++] = sem_getFunct;
 					mag[z++] = TMain;
 					break;
 				}
@@ -265,17 +265,19 @@ int LL1::LL_1() //функция синтаксического анализат
 
 			case neterm_P:
 				// P -> = V | ( )
-				// P -> = V match | ( )
+				// P -> getVar = V match | getFunct ( )
 				if (t == TSave)
 				{
 					mag[z++] = sem_match;
 					mag[z++] = neterm_V;
 					mag[z++] = TSave;
+					mag[z++] = sem_getVar;
 				}
 				else
 				{
 					mag[z++] = TRS;
 					mag[z++] = TLS;
+					mag[z++] = sem_getFunct;
 				}
 
 				break;
@@ -408,17 +410,17 @@ int LL1::LL_1() //функция синтаксического анализат
 
 			case neterm_J:
 				// J -> a K | C | ( V ) | main ( )
-				// J -> a getType K | C | ( V ) | main ( )
+				// J -> a K | C | ( V ) | main getFunct ( )
 				if (t == TIdent)
 				{
 					mag[z++] = neterm_K;
-					mag[z++] = sem_getType;
 					mag[z++] = TIdent;
 				}
 				else if (t == TMain)
 				{
 					mag[z++] = TRS;
 					mag[z++] = TLS;
+					mag[z++] = sem_getFunct;
 					mag[z++] = TMain;
 				}
 				else if (t == TLS)
@@ -436,14 +438,16 @@ int LL1::LL_1() //функция синтаксического анализат
 
 			case neterm_K:
 				// K -> ( ) | eps
+				// K -> getFunct ( ) | getVar
 				if (t == TLS)
 				{
 					mag[z++] = TRS;
 					mag[z++] = TLS;
+					mag[z++] = sem_getFunct;
 				}
 				else
 				{
-					epsilon();
+					mag[z++] = sem_getVar;
 				}
 
 				break;
@@ -467,8 +471,8 @@ int LL1::LL_1() //функция синтаксического анализат
 		{
 			switch (mag[z])
 			{
-			case sem_getType:
-				translate->deltaGetType();
+			case sem_getVar:
+				translate->deltaGetVar();
 				break;
 
 			case sem_match:
@@ -492,6 +496,10 @@ int LL1::LL_1() //функция синтаксического анализат
 
 			case sem_setNewLevel:
 				translate->deltaSetNewLevel();
+				break;
+
+			case sem_getFunct:
+				translate->deltaGetFunct();
 				break;
 			}
 		}

@@ -27,7 +27,7 @@ void Translate::SaveLex(LEX lex)
 	memcpy(global->prevLex, lex, strlen(lex) + 1);
 }
 
-void Translate::deltaGetType()
+void Translate::deltaGetVar()
 {
 	root->SemGetVar(global->prevLex);
 }
@@ -55,4 +55,9 @@ void Translate::deltaReturnLevel()
 void Translate::deltaSetNewLevel()
 {
 	root->SemNewLevel();
+}
+
+void Translate::deltaGetFunct()
+{
+	root->SemGetFunct(global->prevLex);
 }

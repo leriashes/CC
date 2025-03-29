@@ -19,11 +19,12 @@ public:
 	void CleanTree();
 	void SaveLex(LEX lex);
 
-	void deltaGetType();
+	void deltaGetVar();
 	void deltaStartDecl(int lexType);
 	void deltaSetIdent();
 	void deltaSetFunct();
 	void deltaReturnLevel();
 	void deltaSetNewLevel();
+	void deltaGetFunct();
 };
 
