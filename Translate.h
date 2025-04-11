@@ -19,4 +19,5 @@ public:
 	void deltaReturnLevel();
 	void deltaSetNewLevel();
 	void deltaGetFunct();
+	void deltaConstType(int constTerm);
 };

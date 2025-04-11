@@ -51,3 +51,11 @@ void Translate::deltaGetFunct()
 {
 	root->SemGetFunct(global->prevLex);
 }
+
+void Translate::deltaConstType(int constTerm)
+{
+	if (constTerm == TConstInt)
+		global->dataType = TYPE_INT;
+	else
+		global->dataType = TYPE_FLOAT;
+}

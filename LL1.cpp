@@ -31,6 +31,11 @@ int LL1::LL_1() //функция синтаксического анализат
 					translate->SaveLex(lex);
 					t = scan->Scanner(lex);
 				}
+
+				if (t >= TSave && t <= TMod)
+				{
+					genIL->saveOperator(t);
+				}
 			}
 			else
 			{
@@ -140,11 +145,11 @@ int LL1::LL_1() //функция синтаксического анализат
 			case neterm_E:
 				// E -> = V | eps
 				// E -> setIdent = V | setIdent
-				// E -> setIdent push = V match gener| setIdent
+				// E -> setIdent push = V matchLeft gener| setIdent
 				if (t == TSave)
 				{
 					mag[z++] = sem_gener;
-					mag[z++] = sem_match;
+					mag[z++] = sem_matchLeft;
 					mag[z++] = neterm_V;
 					mag[z++] = TSave;
 					mag[z++] = sem_push;
@@ -269,11 +274,11 @@ int LL1::LL_1() //функция синтаксического анализат
 			case neterm_P:
 				// P -> = V | ( )
 				// P -> getVar = V | getFunct ( )
-				// P -> getVar push = V match gener | getFunct ( )
+				// P -> getVar push = V matchLeft gener | getFunct ( )
 				if (t == TSave)
 				{
 					mag[z++] = sem_gener;
-					mag[z++] = sem_match;
+					mag[z++] = sem_matchLeft;
 					mag[z++] = neterm_V;
 					mag[z++] = TSave;
 					mag[z++] = sem_push;
@@ -417,6 +422,7 @@ int LL1::LL_1() //функция синтаксического анализат
 			case neterm_J:
 				// J -> a K | C | ( V ) | main ( )
 				// J -> a K | C | ( V ) | main getFunct ( )
+				// J -> a K | C constType | ( V ) | main getFunct ( )
 				if (t == TIdent)
 				{
 					mag[z++] = neterm_K;
@@ -437,6 +443,7 @@ int LL1::LL_1() //функция синтаксического анализат
 				}
 				else
 				{
+					mag[z++] = sem_constType;
 					mag[z++] = neterm_C;
 				}
 
@@ -445,6 +452,7 @@ int LL1::LL_1() //функция синтаксического анализат
 			case neterm_K:
 				// K -> ( ) | eps
 				// K -> getFunct ( ) | getVar
+				// K -> getFunct ( ) | getVar push
 				if (t == TLS)
 				{
 					mag[z++] = TRS;
@@ -505,7 +513,18 @@ int LL1::LL_1() //функция синтаксического анализат
 				translate->deltaGetFunct();
 				break;
 
+			case sem_constType:
+				translate->deltaConstType(mag[z + 1]);
+				genIL->deltaPushType();
+				genIL->deltaPushRes(genIL->R(mag[z + 1]));
+				break;
+
 			case sem_match:
+				genIL->deltaMatch();
+				break;
+
+			case sem_matchLeft:
+				genIL->deltaMatchLeft();
 				break;
 
 			case sem_push:
@@ -514,6 +533,7 @@ int LL1::LL_1() //функция синтаксического анализат
 				break;
 
 			case sem_gener:
+				genIL->deltaGener(global->operat);
 				break;
 
 			case sem_generIf:
@@ -541,6 +561,11 @@ void LL1::PrintTree()
 	root->Print();
 }
 
+void LL1::PrintTriada()
+{
+	genIL->printTriadaCode();
+}
+
 LL1::LL1(TScanner* scan)
 {
 	this->scan = scan;
@@ -554,8 +579,8 @@ LL1::LL1(TScanner* scan)
 LL1::~LL1()
 {
 	root->CleanTree();
-	delete translate;
-	delete root;
-	delete global;
+
 	delete scan;
+	delete genIL;
+	delete translate;
 }

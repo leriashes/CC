@@ -16,7 +16,16 @@ public:
 	void deltaGener(int operation);
 	void deltaPushType();
 	void deltaPushRes(Operand result);
+	void deltaMatch();
+	void deltaMatchLeft();
+
+	int genMatch(DATA_TYPE first, DATA_TYPE result);
 
 	Operand R(int operand);
 	Operand R();
+
+	void saveOperator(int operation);
+
+	void printTriadaCode();
+	string operationToSymbols(int operation);
 };

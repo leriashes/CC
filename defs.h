@@ -102,13 +102,22 @@ typedef char LEX[MAX_LEX];   //лексема
 #define sem_returnLevel	2004
 #define sem_setNewLevel	2005
 #define sem_getFunct	2006
+#define sem_constType	2007
 
 #define sem_match		2010
-#define sem_push		2011
-#define sem_gener		2012	
-#define sem_generIf		2013
-#define sem_formIf		2014
-#define sem_generGoto	2015
-#define sem_generNop	2016
+#define sem_matchLeft	2011
+#define sem_push		2012
+#define sem_gener		2013	
+#define sem_generIf		2014
+#define sem_formIf		2015
+#define sem_generGoto	2016
+#define sem_generNop	2017
 
 #define MaxTypeSem		sem_generNop
+
+#define intToFloat		2100
+#define shortToInt		2101
+#define shortToFloat	2102
+#define intToShort		2103
+#define floatToInt		2104
+#define floatToShort	2105

@@ -22,4 +22,5 @@ public:
 	~LL1();
 	int LL_1();
 	void PrintTree();
+	void PrintTriada();
 };

@@ -9,6 +9,7 @@ struct GlobalData
 {
 	LEX prevLex;
 	DATA_TYPE dataType;
+	int operat;
 
 	int k;
 	deque<DATA_TYPE> t;

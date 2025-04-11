@@ -1,11 +1,11 @@
-float im;
+float im = 7;
 int a;
 
 short fun()
 {
 	int i = 3;
 	float f;
-	i = 4;
+	i = 4.2;
 }
 
 int j()
@@ -21,7 +21,6 @@ int j()
 		{short i;}
 	}
 	
-	main();
 	return 2;
 
 	
