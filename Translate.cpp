@@ -1,25 +1,15 @@
 #include "Translate.h"
 
-Translate::Translate(TScanner* scan)
+Translate::Translate(Tree* root, GlobalData* global)
 {
-	this->root = new Tree(scan);
-	this->global = new GlobalData();
+	this->root = root;
+	this->global = global;
 }
 
 Translate::~Translate()
 {
 	delete root;
 	delete global;
-}
-
-void Translate::PrintTree()
-{
-	root->Print();
-}
-
-void Translate::CleanTree()
-{
-	root->CleanTree();
 }
 
 void Translate::SaveLex(LEX lex)

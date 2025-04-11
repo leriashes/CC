@@ -13,10 +13,8 @@ class Translate
 	GlobalData* global;
 
 public:
-	Translate(TScanner* scan);
+	Translate(Tree* root, GlobalData* global);
 	~Translate();
-	void PrintTree();
-	void CleanTree();
 	void SaveLex(LEX lex);
 
 	void deltaGetVar();

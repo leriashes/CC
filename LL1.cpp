@@ -512,18 +512,23 @@ int LL1::LL_1() //функция синтаксического анализат
 
 void LL1::PrintTree()
 {
-	translate->PrintTree();
+	root->Print();
 }
 
 LL1::LL1(TScanner* scan)
 {
 	this->scan = scan;
-	this->translate = new Translate(scan);
+	this->root = new Tree(scan);
+	this->global = new GlobalData();
+	this->translate = new Translate(root, global);
 	z = 0;
 }
 
 LL1::~LL1()
 {
-	translate->CleanTree();
+	root->CleanTree();
 	delete translate;
+	delete root;
+	delete global;
+	delete scan;
 }

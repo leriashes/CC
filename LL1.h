@@ -1,6 +1,7 @@
 #pragma once
 #include "Scanner.h"
 #include "Translate.h"
+#include "GenerIL.h"
 
 class LL1
 {
@@ -13,6 +14,9 @@ private:
 public:
 	static TScanner* scan;
 	Translate* translate;
+	Tree* root;
+	GenerIL* genIL;
+	GlobalData* global;
 
 	LL1(TScanner* scan);
 	~LL1();
