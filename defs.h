@@ -112,8 +112,9 @@ typedef char LEX[MAX_LEX];   //лексема
 #define sem_formIf		2015
 #define sem_generGoto	2016
 #define sem_generNop	2017
+#define sem_setAddr		2018
 
-#define MaxTypeSem		sem_generNop
+#define MaxTypeSem		sem_setAddr
 
 #define intToFloat		2100
 #define shortToInt		2101
@@ -121,3 +122,7 @@ typedef char LEX[MAX_LEX];   //лексема
 #define intToShort		2103
 #define floatToInt		2104
 #define floatToShort	2105
+
+#define ifOper			2110
+#define gotoOper		2111
+#define nopOper			2112

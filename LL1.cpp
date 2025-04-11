@@ -264,10 +264,17 @@ int LL1::LL_1() //функция синтаксического анализат
 
 			case neterm_W:
 				// W -> while ( V ) A
+				// W -> while setAddr ( V ) generIf setAddr A formIf generGoto generNop
+				mag[z++] = sem_generNop;
+				mag[z++] = sem_generGoto;
+				mag[z++] = sem_formIf;
 				mag[z++] = neterm_A;
+				mag[z++] = sem_setAddr;
+				mag[z++] = sem_generIf;
 				mag[z++] = TRS;
 				mag[z++] = neterm_V;
 				mag[z++] = TLS;
+				mag[z++] = sem_setAddr;
 				mag[z++] = TWhile;
 				break;
 
@@ -544,15 +551,23 @@ int LL1::LL_1() //функция синтаксического анализат
 				break;
 
 			case sem_generIf:
+				genIL->deltaGenerIf();
 				break;
 
 			case sem_formIf:
+				genIL->deltaFormIf();
 				break;
 
 			case sem_generGoto:
+				genIL->deltaGenerGoto();
 				break;
 
 			case sem_generNop:
+				genIL->deltaGenerNop();
+				break;
+
+			case sem_setAddr:
+				genIL->deltaSetAddr();
 				break;
 			}
 		}

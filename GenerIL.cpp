@@ -41,6 +41,55 @@ void GenerIL::deltaPushRes(Operand result)
 	global->res.push_back(result);
 }
 
+void GenerIL::deltaSetAddr()
+{
+	global->addr.push_back(global->k);
+}
+
+void GenerIL::deltaGenerIf()
+{
+	Triada triada;
+
+	triada.operand1.number = global->k + 1;
+	triada.operand1.isLink = true;
+
+	triada.operation = ifOper;
+
+	global->code[global->k++] = triada;
+}
+
+void GenerIL::deltaFormIf()
+{
+	int addr = global->addr.back() - 1;
+	global->addr.pop_back();
+
+	global->code[addr].operand2.number = global->k + 1;
+	global->code[addr].operand2.isLink = true;
+}
+
+void GenerIL::deltaGenerGoto()
+{
+	Triada triada;
+
+	int addr = global->addr.back();
+
+	triada.operand1.number = addr;
+	triada.operand1.isLink = true;
+
+	triada.operation = gotoOper;
+
+	global->code[global->k++] = triada;
+}
+
+void GenerIL::deltaGenerNop()
+{
+	Triada triada;
+
+	triada.operation = nopOper;
+
+	global->code[global->k++] = triada;
+}
+
 void GenerIL::deltaMatch()
 {
 	DATA_TYPE second = global->t.back();
@@ -238,17 +287,20 @@ void GenerIL::printTriadaCode()
 
 		cout << i + 1 << ") " << operationToSymbols(triada.operation) << " ";
 
-		if (triada.operand1.isLink)
-			cout << "(" << triada.operand1.number + 1 << ") ";
-		else
-			cout << triada.operand1.lex << " ";
-
-		if (triada.operation < 2100)
+		if (triada.operation != nopOper)
 		{
-			if (triada.operand2.isLink)
-				cout << "(" << triada.operand2.number + 1 << ") ";
+			if (triada.operand1.isLink)
+				cout << "(" << triada.operand1.number + 1 << ") ";
 			else
-				cout << triada.operand2.lex << " ";
+				cout << triada.operand1.lex << " ";
+
+			if (triada.operation < intToFloat || triada.operation == ifOper)
+			{
+				if (triada.operand2.isLink)
+					cout << "(" << triada.operand2.number + 1 << ") ";
+				else
+					cout << triada.operand2.lex << " ";
+			}
 		}
 
 		cout << endl;
@@ -318,6 +370,15 @@ string GenerIL::operationToSymbols(int operation)
 
 	case floatToShort:
 		return "f->s";
+
+	case ifOper:
+		return "if";
+
+	case gotoOper:
+		return "goto";
+
+	case nopOper:
+		return "nop";
 
 	default:        
 		return "UNKNOWN_OP";

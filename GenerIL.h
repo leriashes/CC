@@ -16,6 +16,11 @@ public:
 	void deltaGener(int operation);
 	void deltaPushType();
 	void deltaPushRes(Operand result);
+	void deltaSetAddr();
+	void deltaGenerIf();
+	void deltaFormIf();
+	void deltaGenerGoto();
+	void deltaGenerNop();
 	void deltaMatch();
 	void deltaMatchLeft();
 

@@ -18,6 +18,8 @@ int j()
 	{
 		int i;
 
+		i = 5 + 2.1;
+
 		{short i;}
 	}
 	
