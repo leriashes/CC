@@ -139,12 +139,15 @@ int LL1::LL_1() //функция синтаксического анализат
 
 			case neterm_E:
 				// E -> = V | eps
-				// E -> setIdent = V match | setIdent
+				// E -> setIdent = V | setIdent
+				// E -> setIdent push = V match gener| setIdent
 				if (t == TSave)
 				{
+					mag[z++] = sem_gener;
 					mag[z++] = sem_match;
 					mag[z++] = neterm_V;
 					mag[z++] = TSave;
+					mag[z++] = sem_push;
 					mag[z++] = sem_setIdent;
 				}
 				else
