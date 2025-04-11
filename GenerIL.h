@@ -22,6 +22,10 @@ public:
 	void deltaGenerGoto();
 	void deltaGenerNop();
 	void deltaGenerCall();
+	void deltaGenerReturn();
+	void deltaGenerBreak();
+	void deltaStartFunc();
+	void deltaEndFunc();
 	void deltaMatch();
 	void deltaMatchLeft();
 

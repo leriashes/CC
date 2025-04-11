@@ -114,8 +114,12 @@ typedef char LEX[MAX_LEX];   //лексема
 #define sem_generNop	2017
 #define sem_setAddr		2018
 #define sem_generCall	2019
+#define sem_startFunc	2020
+#define sem_endFunc		2021
+#define sem_generReturn	2022
+#define sem_generBreak	2023
 
-#define MaxTypeSem		sem_generCall
+#define MaxTypeSem		sem_generBreak
 
 #define ifOper			2090
 
@@ -127,5 +131,13 @@ typedef char LEX[MAX_LEX];   //лексема
 #define floatToShort	2105
 
 #define callOper		2110
-#define gotoOper		2111
-#define nopOper			2112
+#define returnOper		2111
+
+#define breakOper		2120
+#define gotoOper		2121
+#define procOper		2122
+#define prologOper		2123
+#define epilogOper		2124
+#define retOper			2125
+#define endpOper		2126
+#define nopOper			2127

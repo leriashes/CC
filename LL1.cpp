@@ -165,10 +165,14 @@ int LL1::LL_1() //функция синтаксического анализат
 			case neterm_F:
 				// F -> ( ) Q
 				// F -> setFunct ( ) Q returnLevel
+				// F -> setFunct push ( ) startFunc Q endFunc returnLevel
 				mag[z++] = sem_returnLevel;
+				mag[z++] = sem_endFunc;
 				mag[z++] = neterm_Q;
+				mag[z++] = sem_startFunc;
 				mag[z++] = TRS;
 				mag[z++] = TLS;
+				mag[z++] = sem_push;
 				mag[z++] = sem_setFunct;
 				break;
 
@@ -254,14 +258,17 @@ int LL1::LL_1() //функция синтаксического анализат
 
 			case neterm_R:
 				// R -> return V
-				// R -> return V match
-				//mag[z++] = sem_match;
+				// R -> return V matchLeft generReturn
+				mag[z++] = sem_generReturn;
+				mag[z++] = sem_matchLeft;
 				mag[z++] = neterm_V;
 				mag[z++] = TReturn;
 				break;
 
 			case neterm_B:
 				// B -> break
+				// B -> break generBreak
+				mag[z++] = sem_generBreak;
 				mag[z++] = TBreak;
 				break;
 
@@ -512,7 +519,10 @@ int LL1::LL_1() //функция синтаксического анализат
 				break;
 
 			case sem_startDecl:
-				translate->deltaStartDecl(mag[z + 1]);
+				if (mag[z + 1] != neterm_I)
+					translate->deltaStartDecl(mag[z + 1]);
+				else
+					translate->deltaStartDecl(mag[z + 2]);
 				break;
 
 			case sem_setIdent:
@@ -581,6 +591,22 @@ int LL1::LL_1() //функция синтаксического анализат
 
 			case sem_generCall:
 				genIL->deltaGenerCall();
+				break;
+
+			case sem_startFunc:
+				genIL->deltaStartFunc();
+				break;
+
+			case sem_endFunc:
+				genIL->deltaEndFunc();
+				break;
+
+			case sem_generReturn:
+				genIL->deltaGenerReturn();
+				break;
+
+			case sem_generBreak:
+				genIL->deltaGenerBreak();
 				break;
 			}
 		}

@@ -111,6 +111,52 @@ void GenerIL::deltaGenerCall()
 	global->code[global->k++] = triada;
 }
 
+void GenerIL::deltaGenerReturn()
+{
+	Triada triada;
+
+	triada.operand1 = global->res.back();
+	global->res.pop_back();
+	global->res.pop_back();
+	global->t.pop_back();
+	global->t.pop_back();
+
+	triada.operation = returnOper;
+
+	global->code[global->k++] = triada;
+}
+
+void GenerIL::deltaGenerBreak()
+{
+}
+
+void GenerIL::deltaStartFunc()
+{
+	Triada triada;
+
+	triada.operand1 = global->res.back();
+	triada.operation = procOper;
+
+	global->code[global->k++] = triada;
+
+	triada.operation = prologOper;
+	global->code[global->k++] = triada;
+}
+
+void GenerIL::deltaEndFunc()
+{
+	Triada triada;
+
+	triada.operation = epilogOper;
+	global->code[global->k++] = triada;
+
+	triada.operation = retOper;
+	global->code[global->k++] = triada;
+
+	triada.operation = endpOper;
+	global->code[global->k++] = triada;
+}
+
 void GenerIL::deltaMatch()
 {
 	DATA_TYPE second = global->t.back();
@@ -308,7 +354,7 @@ void GenerIL::printTriadaCode()
 
 		cout << i + 1 << ") " << operationToSymbols(triada.operation) << " ";
 
-		if (triada.operation != nopOper)
+		if (triada.operation < prologOper)
 		{
 			if (triada.operand1.isLink)
 				cout << "(" << triada.operand1.number + 1 << ") ";
@@ -403,6 +449,27 @@ string GenerIL::operationToSymbols(int operation)
 
 	case callOper:
 		return "call";
+
+	case procOper:
+		return "proc";
+
+	case prologOper:
+		return "prolog";
+
+	case epilogOper:
+		return "epilog";
+
+	case retOper:
+		return "ret";
+
+	case endpOper:
+		return "endp";
+
+	case returnOper:
+		return "return";
+
+	case breakOper:
+		return "break";
 
 	default:        
 		return "UNKNOWN_OP";

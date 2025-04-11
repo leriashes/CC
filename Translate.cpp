@@ -49,7 +49,7 @@ void Translate::deltaSetNewLevel()
 
 void Translate::deltaGetFunct()
 {
-	root->SemGetFunct(global->prevLex);
+	global->dataType = root->SemGetFunct(global->prevLex)->GetType();
 }
 
 void Translate::deltaConstType(int constTerm)
