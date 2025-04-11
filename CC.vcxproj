@@ -141,6 +141,7 @@
     <ClInclude Include="Scanner.h" />
     <ClInclude Include="Semant.h" />
     <ClInclude Include="Translate.h" />
+    <ClInclude Include="Triada.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
