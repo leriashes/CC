@@ -12,11 +12,21 @@ void GenerIL::deltaGener(int operation)
 
 	triada.operand2 = global->res.back();
 	global->res.pop_back();
+	global->t.pop_back();
 
 	triada.operand1 = global->res.back();
 	global->res.pop_back();
 
 	triada.operation = operation;
+
+	if (global->operation.size() != 1)
+	{
+		global->res.push_back(currentLink());
+	}
+	else
+	{
+		global->t.pop_back();
+	}
 
 	global->code[global->k++] = triada;
 }
@@ -41,12 +51,7 @@ void GenerIL::deltaMatch()
 
 	DATA_TYPE resType = first;
 
-	if (first == second)
-	{
-		global->t.push_back(first);
-		global->t.push_back(second);
-	}
-	else
+	if (first != second)
 	{
 		if (first == NO_TYPE || second == NO_TYPE)
 			resType = NO_TYPE;
@@ -56,12 +61,6 @@ void GenerIL::deltaMatch()
 			resType = TYPE_INT;
 		else
 			resType = TYPE_SHORT;
-
-		Operand match;
-
-		match.isLink = true;
-		match.isConst = false;
-		match.number = global->k;
 
 		if (first != resType)
 		{
@@ -75,7 +74,7 @@ void GenerIL::deltaMatch()
 			triada.operand1 = global->res.back();
 			global->res.pop_back();
 
-			global->res.push_back(match);
+			global->res.push_back(currentLink());
 			global->res.push_back(operand2);
 
 			triada.operation = operation;
@@ -95,13 +94,16 @@ void GenerIL::deltaMatch()
 			global->res.pop_back();
 
 			global->res.push_back(operand1);
-			global->res.push_back(match);
+			global->res.push_back(currentLink());
 
 			triada.operation = operation;
 
 			global->code[global->k++] = triada;
 		}
 	}
+
+	global->t.push_back(resType);
+	global->t.push_back(resType);
 }
 
 void GenerIL::deltaMatchLeft()
@@ -114,19 +116,8 @@ void GenerIL::deltaMatchLeft()
 
 	DATA_TYPE resType = first;
 
-	if (first == second)
+	if (first != second)
 	{
-		global->t.push_back(first);
-		global->t.push_back(second);
-	}
-	else
-	{
-		Operand match;
-
-		match.isLink = true;
-		match.isConst = false;
-		match.number = global->k;
-
 		int operation = genMatch(second, resType);
 
 		Triada triada;
@@ -138,12 +129,15 @@ void GenerIL::deltaMatchLeft()
 		global->res.pop_back();
 
 		global->res.push_back(operand1);
-		global->res.push_back(match);
+		global->res.push_back(currentLink());
 
 		triada.operation = operation;
 
 		global->code[global->k++] = triada;
 	}
+
+	global->t.push_back(resType);
+	global->t.push_back(resType);
 }
 
 int GenerIL::genMatch(DATA_TYPE first, DATA_TYPE result)
@@ -187,6 +181,17 @@ int GenerIL::genMatch(DATA_TYPE first, DATA_TYPE result)
 	return res;
 }
 
+Operand GenerIL::currentLink()
+{
+	Operand link;
+
+	link.isLink = true;
+	link.isConst = false;
+	link.number = global->k;
+
+	return link;
+}
+
 Operand GenerIL::R(int operand)
 {
 	Operand result;
@@ -220,7 +225,7 @@ Operand GenerIL::R()
 
 void GenerIL::saveOperator(int operation)
 {
-	global->operat = operation;
+	global->operation.push_back(operation);
 }
 
 void GenerIL::printTriadaCode()

@@ -9,11 +9,12 @@ struct GlobalData
 {
 	LEX prevLex;
 	DATA_TYPE dataType;
-	int operat;
 
 	int k;
 	deque<DATA_TYPE> t;
 	Triada code[MAXCODE];
 	deque<Operand> res;
 	deque<int> addr;
+
+	deque<int> operation;
 };

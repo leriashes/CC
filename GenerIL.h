@@ -20,6 +20,7 @@ public:
 	void deltaMatchLeft();
 
 	int genMatch(DATA_TYPE first, DATA_TYPE result);
+	Operand currentLink();
 
 	Operand R(int operand);
 	Operand R();

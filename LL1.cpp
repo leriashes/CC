@@ -252,7 +252,7 @@ int LL1::LL_1() //функция синтаксического анализат
 			case neterm_R:
 				// R -> return V
 				// R -> return V match
-				mag[z++] = sem_match;
+				//mag[z++] = sem_match;
 				mag[z++] = neterm_V;
 				mag[z++] = TReturn;
 				break;
@@ -301,10 +301,11 @@ int LL1::LL_1() //функция синтаксического анализат
 
 			case neterm_V1:
 				// V1 -> == Z V1 | != Z V1 | eps
-				// V1 -> == Z match V1 | != Z match V1 | eps
+				// V1 -> == Z match gener V1 | != Z match gener V1 | eps
 				if (t == TEq || t == TNEq)
 				{
 					mag[z++] = neterm_V1;
+					mag[z++] = sem_gener;
 					mag[z++] = sem_match;
 					mag[z++] = neterm_Z;
 					mag[z++] = t;
@@ -324,10 +325,11 @@ int LL1::LL_1() //функция синтаксического анализат
 
 			case neterm_Z1:
 				// Z1 -> < Y Z1 | <= Y Z1 | > Y Z1 | >= Y Z1 | eps
-				// Z1 -> < Y match Z1 | <= Y match Z1 | > Y match Z1 | >= Y match Z1 | eps
+				// Z1 -> < Y match gener Z1 | <= Y match gener Z1 | > Y match gener Z1 | >= Y match gener Z1 | eps
 				if (t == TLT || t == TGT || t == TLE || t == TGE)
 				{
 					mag[z++] = neterm_V1;
+					mag[z++] = sem_gener;
 					mag[z++] = sem_match;
 					mag[z++] = neterm_Z;
 					mag[z++] = t;
@@ -347,10 +349,11 @@ int LL1::LL_1() //функция синтаксического анализат
 
 			case neterm_Y1:
 				// Y1 -> << L Y1 | >> L Y1 | eps
-				// Y1 -> << L match Y1 | >> L match Y1 | eps
+				// Y1 -> << L match gener Y1 | >> L match gener Y1 | eps
 				if (t == TLShift || t == TRShift)
 				{
 					mag[z++] = neterm_Y1;
+					mag[z++] = sem_gener;
 					mag[z++] = sem_match;
 					mag[z++] = neterm_L;
 					mag[z++] = t;
@@ -370,10 +373,11 @@ int LL1::LL_1() //функция синтаксического анализат
 
 			case neterm_L1:
 				// L1 -> + M L1 | - M L1 | eps
-				// L1 -> + M match L1 | - M match L1 | eps
+				// L1 -> + M match gener L1 | - M match gener L1 | eps
 				if (t == TPlus || t == TMinus)
 				{
 					mag[z++] = neterm_L1;
+					mag[z++] = sem_gener;
 					mag[z++] = sem_match;
 					mag[z++] = neterm_M;
 					mag[z++] = t;
@@ -393,10 +397,11 @@ int LL1::LL_1() //функция синтаксического анализат
 
 			case neterm_M1:
 				// M1 -> * N M1 | / N M1 | % N M1 | eps
-				// M1 -> * N match M1 | / N match M1 | % N match M1 | eps
+				// M1 -> * N match gener M1 | / N match gener M1 | % N match gener M1 | eps
 				if (t == TMult || t == TDiv || t == TMod)
 				{
 					mag[z++] = neterm_M1;
+					mag[z++] = sem_gener;
 					mag[z++] = sem_match;
 					mag[z++] = neterm_N;
 					mag[z++] = t;
@@ -461,6 +466,7 @@ int LL1::LL_1() //функция синтаксического анализат
 				}
 				else
 				{
+					mag[z++] = sem_push;
 					mag[z++] = sem_getVar;
 				}
 
@@ -524,7 +530,7 @@ int LL1::LL_1() //функция синтаксического анализат
 				break;
 
 			case sem_matchLeft:
-				genIL->deltaMatchLeft();
+ 				genIL->deltaMatchLeft();
 				break;
 
 			case sem_push:
@@ -533,7 +539,8 @@ int LL1::LL_1() //функция синтаксического анализат
 				break;
 
 			case sem_gener:
-				genIL->deltaGener(global->operat);
+				genIL->deltaGener(global->operation.back());
+				global->operation.pop_back();
 				break;
 
 			case sem_generIf:
