@@ -95,13 +95,20 @@ typedef char LEX[MAX_LEX];   //лексема
 #define MaxTypeNeterminal		neterm_C
 
 //операционные символы (семантика)
-#define sem_getVar		2000 //sem1
-#define sem_match		2001 //sem2
-#define sem_startDecl	2002 //sem3
-#define sem_setIdent	2003 //sem4
-#define sem_setFunct	2004 //sem5
-#define sem_returnLevel	2005 //sem6
-#define sem_setNewLevel	2006 //sem7
-#define sem_getFunct	2007 //sem8
+#define sem_getVar		2000
+#define sem_startDecl	2001
+#define sem_setIdent	2002
+#define sem_setFunct	2003
+#define sem_returnLevel	2004
+#define sem_setNewLevel	2005
+#define sem_getFunct	2006
 
-#define MaxTypeSem		sem_getFunct
+#define sem_match		2010
+#define sem_push		2011
+#define sem_gener		2012	
+#define sem_generIf		2013
+#define sem_formIf		2014
+#define sem_generGoto	2015
+#define sem_generNop	2016
+
+#define MaxTypeSem		sem_generNop

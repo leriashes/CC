@@ -137,6 +137,7 @@
   <ItemGroup>
     <ClInclude Include="defs.h" />
     <ClInclude Include="GenerIL.h" />
+    <ClInclude Include="GlobalData.h" />
     <ClInclude Include="LL1.h" />
     <ClInclude Include="Scanner.h" />
     <ClInclude Include="Semant.h" />

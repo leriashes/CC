@@ -19,7 +19,7 @@ void Translate::SaveLex(LEX lex)
 
 void Translate::deltaGetVar()
 {
-	root->SemGetVar(global->prevLex);
+	global->dataType = root->SemGetVar(global->prevLex)->GetType();
 }
 
 void Translate::deltaStartDecl(int lexType)

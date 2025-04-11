@@ -11,6 +11,6 @@ struct Operand
 
 struct Triada
 {
-	LEX operation; //операция
+	int operation; //операция
 	Operand operand1, operand2; //операнды
 };

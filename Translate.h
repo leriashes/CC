@@ -1,11 +1,6 @@
 #pragma once
 #include "Semant.h"
-
-struct GlobalData
-{
-	LEX prevLex;
-	DATA_TYPE dataType;
-};
+#include "GlobalData.h"
 
 class Translate
 {
@@ -25,4 +20,3 @@ public:
 	void deltaSetNewLevel();
 	void deltaGetFunct();
 };
-

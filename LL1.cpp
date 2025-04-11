@@ -265,12 +265,15 @@ int LL1::LL_1() //функция синтаксического анализат
 
 			case neterm_P:
 				// P -> = V | ( )
-				// P -> getVar = V match | getFunct ( )
+				// P -> getVar = V | getFunct ( )
+				// P -> getVar push = V match gener | getFunct ( )
 				if (t == TSave)
 				{
+					mag[z++] = sem_gener;
 					mag[z++] = sem_match;
 					mag[z++] = neterm_V;
 					mag[z++] = TSave;
+					mag[z++] = sem_push;
 					mag[z++] = sem_getVar;
 				}
 				else
@@ -475,9 +478,6 @@ int LL1::LL_1() //функция синтаксического анализат
 				translate->deltaGetVar();
 				break;
 
-			case sem_match:
-				break;
-
 			case sem_startDecl:
 				translate->deltaStartDecl(mag[z + 1]);
 				break;
@@ -501,6 +501,29 @@ int LL1::LL_1() //функция синтаксического анализат
 			case sem_getFunct:
 				translate->deltaGetFunct();
 				break;
+
+			case sem_match:
+				break;
+
+			case sem_push:
+				genIL->deltaPushType();
+				genIL->deltaPushRes(genIL->R());
+				break;
+
+			case sem_gener:
+				break;
+
+			case sem_generIf:
+				break;
+
+			case sem_formIf:
+				break;
+
+			case sem_generGoto:
+				break;
+
+			case sem_generNop:
+				break;
 			}
 		}
 
@@ -521,6 +544,7 @@ LL1::LL1(TScanner* scan)
 	this->root = new Tree(scan);
 	this->global = new GlobalData();
 	this->translate = new Translate(root, global);
+	this->genIL = new GenerIL(root, global);
 	z = 0;
 }
 
