@@ -61,6 +61,17 @@ void GenerIL::deltaGenerIf()
 void GenerIL::deltaFormIf()
 {
 	int addr = global->addr.back() - 1;
+
+	while (global->code[addr].operation != ifOper)
+	{
+		global->addr.pop_back();
+
+		global->code[addr].operand1.number = global->k + 1;
+		global->code[addr].operand1.isLink = true;
+
+		addr = global->addr.back() - 1;
+	}
+
 	global->addr.pop_back();
 
 	global->code[addr].operand2.number = global->k + 1;
@@ -128,6 +139,11 @@ void GenerIL::deltaGenerReturn()
 
 void GenerIL::deltaGenerBreak()
 {
+	Triada triada;
+
+	triada.operation = gotoOper;
+
+	global->code[global->k++] = triada;
 }
 
 void GenerIL::deltaStartFunc()
@@ -354,7 +370,7 @@ void GenerIL::printTriadaCode()
 
 		cout << i + 1 << ") " << operationToSymbols(triada.operation) << " ";
 
-		if (triada.operation < prologOper)
+		if (triada.operation < breakOper)
 		{
 			if (triada.operand1.isLink)
 				cout << "(" << triada.operand1.number + 1 << ") ";

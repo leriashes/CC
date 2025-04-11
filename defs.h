@@ -121,7 +121,7 @@ typedef char LEX[MAX_LEX];   //лексема
 
 #define MaxTypeSem		sem_generBreak
 
-#define ifOper			2090
+#define ifOper			2090	//if
 
 #define intToFloat		2100
 #define shortToInt		2101
@@ -132,12 +132,12 @@ typedef char LEX[MAX_LEX];   //лексема
 
 #define callOper		2110
 #define returnOper		2111
+#define gotoOper		2112	//goto
+#define procOper		2113
 
 #define breakOper		2120
-#define gotoOper		2121
-#define procOper		2122
-#define prologOper		2123
-#define epilogOper		2124
-#define retOper			2125
-#define endpOper		2126
-#define nopOper			2127
+#define prologOper		2121
+#define epilogOper		2122
+#define retOper			2123
+#define endpOper		2124
+#define nopOper			2125

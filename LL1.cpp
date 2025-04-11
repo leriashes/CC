@@ -267,7 +267,8 @@ int LL1::LL_1() //функция синтаксического анализат
 
 			case neterm_B:
 				// B -> break
-				// B -> break generBreak
+				// B -> break generBreak setAddr
+				mag[z++] = sem_setAddr;
 				mag[z++] = sem_generBreak;
 				mag[z++] = TBreak;
 				break;

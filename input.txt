@@ -18,6 +18,7 @@ int j()
 		int i;
 
 		i = 5 + fun();
+		break;
 
 		{short i;}
 	}
