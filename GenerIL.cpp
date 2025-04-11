@@ -90,6 +90,27 @@ void GenerIL::deltaGenerNop()
 	global->code[global->k++] = triada;
 }
 
+void GenerIL::deltaGenerCall()
+{
+	Triada triada;
+
+	triada.operand1 = global->res.back();
+	global->res.pop_back();
+
+	triada.operation = callOper;
+
+	if (global->operation.size() != 1)
+	{
+		global->res.push_back(currentLink());
+	}
+	else
+	{
+		global->t.pop_back();
+	}
+
+	global->code[global->k++] = triada;
+}
+
 void GenerIL::deltaMatch()
 {
 	DATA_TYPE second = global->t.back();
@@ -379,6 +400,9 @@ string GenerIL::operationToSymbols(int operation)
 
 	case nopOper:
 		return "nop";
+
+	case callOper:
+		return "call";
 
 	default:        
 		return "UNKNOWN_OP";

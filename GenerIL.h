@@ -21,6 +21,7 @@ public:
 	void deltaFormIf();
 	void deltaGenerGoto();
 	void deltaGenerNop();
+	void deltaGenerCall();
 	void deltaMatch();
 	void deltaMatchLeft();
 

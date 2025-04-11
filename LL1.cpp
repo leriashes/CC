@@ -209,6 +209,7 @@ int LL1::LL_1() //функция синтаксического анализат
 			case neterm_A:
 				// A -> a P ; | Q | W | ; | R ; | B ; | main ( ) ;
 				// A -> a P ; | Q | W | ; | R ; | B ; | main getFunct ( ) ;
+				// A -> a P ; | Q | W | ; | R ; | B ; | main getFunct push ( ) generCall ;
 				switch (t)
 				{
 				case TIdent:
@@ -241,8 +242,10 @@ int LL1::LL_1() //функция синтаксического анализат
 
 				case TMain:
 					mag[z++] = TSemicolon;
+					mag[z++] = sem_generCall;
 					mag[z++] = TRS;
 					mag[z++] = TLS;
+					mag[z++] = sem_push;
 					mag[z++] = sem_getFunct;
 					mag[z++] = TMain;
 					break;
@@ -281,7 +284,7 @@ int LL1::LL_1() //функция синтаксического анализат
 			case neterm_P:
 				// P -> = V | ( )
 				// P -> getVar = V | getFunct ( )
-				// P -> getVar push = V matchLeft gener | getFunct ( )
+				// P -> getVar push = V matchLeft gener | getFunct push ( ) generCall
 				if (t == TSave)
 				{
 					mag[z++] = sem_gener;
@@ -293,8 +296,10 @@ int LL1::LL_1() //функция синтаксического анализат
 				}
 				else
 				{
+					mag[z++] = sem_generCall;
 					mag[z++] = TRS;
 					mag[z++] = TLS;
+					mag[z++] = sem_push;
 					mag[z++] = sem_getFunct;
 				}
 
@@ -434,7 +439,7 @@ int LL1::LL_1() //функция синтаксического анализат
 			case neterm_J:
 				// J -> a K | C | ( V ) | main ( )
 				// J -> a K | C | ( V ) | main getFunct ( )
-				// J -> a K | C constType | ( V ) | main getFunct ( )
+				// J -> a K | C constType | ( V ) | main getFunct push ( ) generCall
 				if (t == TIdent)
 				{
 					mag[z++] = neterm_K;
@@ -442,8 +447,10 @@ int LL1::LL_1() //функция синтаксического анализат
 				}
 				else if (t == TMain)
 				{
+					mag[z++] = sem_generCall;
 					mag[z++] = TRS;
 					mag[z++] = TLS;
+					mag[z++] = sem_push;
 					mag[z++] = sem_getFunct;
 					mag[z++] = TMain;
 				}
@@ -464,11 +471,13 @@ int LL1::LL_1() //функция синтаксического анализат
 			case neterm_K:
 				// K -> ( ) | eps
 				// K -> getFunct ( ) | getVar
-				// K -> getFunct ( ) | getVar push
+				// K -> getFunct push ( ) generCall | getVar push
 				if (t == TLS)
 				{
+					mag[z++] = sem_generCall;
 					mag[z++] = TRS;
 					mag[z++] = TLS;
+					mag[z++] = sem_push;
 					mag[z++] = sem_getFunct;
 				}
 				else
@@ -568,6 +577,10 @@ int LL1::LL_1() //функция синтаксического анализат
 
 			case sem_setAddr:
 				genIL->deltaSetAddr();
+				break;
+
+			case sem_generCall:
+				genIL->deltaGenerCall();
 				break;
 			}
 		}
