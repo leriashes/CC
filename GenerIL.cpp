@@ -272,6 +272,79 @@ void GenerIL::deltaMatchLeft()
 	global->t.push_back(resType);
 }
 
+void GenerIL::deltaMatchInt()
+{
+	DATA_TYPE second = global->t.back();
+	global->t.pop_back();
+
+	DATA_TYPE first = global->t.back();
+	global->t.pop_back();
+
+	Operand operand2 = global->res.back();
+
+	if (second != TYPE_INT && second != TYPE_SHORT)
+	{
+		needIntType(operand2);
+	}
+
+	global->res.pop_back();
+
+	Operand operand1 = global->res.back();
+
+	if (first != TYPE_INT && first != TYPE_SHORT)
+	{
+		needIntType(operand1);
+	}
+
+	global->res.push_back(operand2);
+
+	DATA_TYPE resType = TYPE_SHORT;
+
+	if (first == TYPE_INT || second == TYPE_INT)
+	{
+		resType = TYPE_INT;
+	}
+
+	if (first != resType)
+	{
+		int operation = genMatch(first, resType);
+
+		Triada triada;
+
+		global->res.pop_back();
+
+		triada.operand1 = operand1;
+		global->res.pop_back();
+
+		global->res.push_back(currentLink());
+		global->res.push_back(operand2);
+
+		triada.operation = operation;
+
+		global->code[global->k++] = triada;
+	}
+	else if (second != resType)
+	{
+		int operation = genMatch(second, resType);
+
+		Triada triada;
+
+		triada.operand1 = operand2;
+		global->res.pop_back();
+		global->res.pop_back();
+
+		global->res.push_back(operand1);
+		global->res.push_back(currentLink());
+
+		triada.operation = operation;
+
+		global->code[global->k++] = triada;
+	}
+
+	global->t.push_back(resType);
+	global->t.push_back(resType);
+}
+
 int GenerIL::genMatch(DATA_TYPE first, DATA_TYPE result)
 {
 	int res = 0;
@@ -358,6 +431,18 @@ Operand GenerIL::R()
 void GenerIL::saveOperator(int operation)
 {
 	global->operation.push_back(operation);
+}
+
+void GenerIL::needIntType(Operand operand)
+{
+	if (!operand.isLink)
+	{
+		root->scan->PrintError("Выражение должно относиться к целочисленному типу", operand.lex);
+	}
+	else
+	{
+		root->scan->PrintError("Выражение должно относиться к целочисленному типу");
+	}
 }
 
 void GenerIL::printTriadaCode()

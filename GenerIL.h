@@ -28,6 +28,7 @@ public:
 	void deltaEndFunc();
 	void deltaMatch();
 	void deltaMatchLeft();
+	void deltaMatchInt();
 
 	int genMatch(DATA_TYPE first, DATA_TYPE result);
 	Operand currentLink();
@@ -37,6 +38,7 @@ public:
 
 	void saveOperator(int operation);
 
+	void needIntType(Operand operand);
 	void printTriadaCode();
 	string operationToSymbols(int operation);
 };

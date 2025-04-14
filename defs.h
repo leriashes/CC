@@ -106,18 +106,19 @@ typedef char LEX[MAX_LEX];   //лексема
 
 #define sem_match		2010
 #define sem_matchLeft	2011
-#define sem_push		2012
-#define sem_gener		2013	
-#define sem_generIf		2014
-#define sem_formIf		2015
-#define sem_generGoto	2016
-#define sem_generNop	2017
-#define sem_setAddr		2018
-#define sem_generCall	2019
-#define sem_startFunc	2020
+#define sem_matchInt	2012
+#define sem_push		2013
+#define sem_gener		2014	
+#define sem_generIf		2015
+#define sem_formIf		2016
+#define sem_generGoto	2017
+#define sem_generNop	2018
+#define sem_setAddr		2019
+#define sem_generCall	2020
+#define sem_startFunc	2022
 #define sem_endFunc		2021
-#define sem_generReturn	2022
-#define sem_generBreak	2023
+#define sem_generReturn	2023
+#define sem_generBreak	2024
 
 #define MaxTypeSem		sem_generBreak
 

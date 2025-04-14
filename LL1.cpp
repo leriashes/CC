@@ -369,12 +369,12 @@ int LL1::LL_1() //функция синтаксического анализат
 
 			case neterm_Y1:
 				// Y1 -> << L Y1 | >> L Y1 | eps
-				// Y1 -> << L match gener Y1 | >> L match gener Y1 | eps
+				// Y1 -> << L matchInt gener Y1 | >> L matchInt gener Y1 | eps
 				if (t == TLShift || t == TRShift)
 				{
 					mag[z++] = neterm_Y1;
 					mag[z++] = sem_gener;
-					mag[z++] = sem_match;
+					mag[z++] = sem_matchInt;
 					mag[z++] = neterm_L;
 					mag[z++] = t;
 				}
@@ -417,12 +417,20 @@ int LL1::LL_1() //функция синтаксического анализат
 
 			case neterm_M1:
 				// M1 -> * N M1 | / N M1 | % N M1 | eps
-				// M1 -> * N match gener M1 | / N match gener M1 | % N match gener M1 | eps
-				if (t == TMult || t == TDiv || t == TMod)
+				// M1 -> * N match gener M1 | / N match gener M1 | % N matchInt gener M1 | eps
+				if (t == TMult || t == TDiv)
 				{
 					mag[z++] = neterm_M1;
 					mag[z++] = sem_gener;
 					mag[z++] = sem_match;
+					mag[z++] = neterm_N;
+					mag[z++] = t;
+				}
+				else if (t == TMod)
+				{
+					mag[z++] = neterm_M1;
+					mag[z++] = sem_gener;
+					mag[z++] = sem_matchInt;
 					mag[z++] = neterm_N;
 					mag[z++] = t;
 				}
@@ -558,6 +566,10 @@ int LL1::LL_1() //функция синтаксического анализат
 
 			case sem_matchLeft:
  				genIL->deltaMatchLeft();
+				break;
+
+			case sem_matchInt:
+				genIL->deltaMatchInt();
 				break;
 
 			case sem_push:
