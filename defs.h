@@ -119,8 +119,9 @@ typedef char LEX[MAX_LEX];   //лексема
 #define sem_endFunc		2021
 #define sem_generReturn	2023
 #define sem_generBreak	2024
+#define sem_generUnar	2025
 
-#define MaxTypeSem		sem_generBreak
+#define MaxTypeSem		sem_generUnar
 
 #define ifOper			2090	//if
 

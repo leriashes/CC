@@ -31,6 +31,34 @@ void GenerIL::deltaGener(int operation)
 	global->code[global->k++] = triada;
 }
 
+void GenerIL::deltaGenerUnar(int operation)
+{
+	if (operation == TMinus)
+	{
+		Triada triada;
+
+		triada.operand2 = global->res.back();
+		global->res.pop_back();
+
+		triada.operand1.isConst = true;
+		triada.operand1.isLink = false;
+		memcpy(triada.operand1.lex, "0", strlen("0") + 1);
+
+		triada.operation = operation;
+
+		if (global->operation.size() != 1)
+		{
+			global->res.push_back(currentLink());
+		}
+		else
+		{
+			global->t.pop_back();
+		}
+
+		global->code[global->k++] = triada;
+	}
+}
+
 void GenerIL::deltaPushType()
 {
 	global->t.push_back(global->dataType);

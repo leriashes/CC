@@ -14,6 +14,7 @@ public:
 	GenerIL(Tree* root, GlobalData* global);
 
 	void deltaGener(int operation);
+	void deltaGenerUnar(int operation);
 	void deltaPushType();
 	void deltaPushRes(Operand result);
 	void deltaSetAddr();

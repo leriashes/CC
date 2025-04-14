@@ -442,12 +442,17 @@ int LL1::LL_1() //функция синтаксического анализат
 				break;
 
 			case neterm_N:
-				// N -> + J | - J | J
-				mag[z++] = neterm_J;
+				// N -> + J generUnar | - J generUnar | J
 
 				if (t == TPlus || t == TMinus)
 				{
+					mag[z++] = sem_generUnar;
+					mag[z++] = neterm_J;
 					mag[z++] = t;
+				}
+				else
+				{
+					mag[z++] = neterm_J;
 				}
 
 				break;
@@ -579,6 +584,11 @@ int LL1::LL_1() //функция синтаксического анализат
 
 			case sem_gener:
 				genIL->deltaGener(global->operation.back());
+				global->operation.pop_back();
+				break;
+
+			case sem_generUnar:
+				genIL->deltaGenerUnar(global->operation.back());
 				global->operation.pop_back();
 				break;
 
