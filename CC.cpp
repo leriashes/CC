@@ -30,6 +30,7 @@ int main(int argc, char* argv[])
     printf("\n\n\nСЕМАНТИЧЕСКОЕ ДЕРЕВО\n\n");
     gram->PrintTree();
     gram->PrintTriada();
+    gram->GenCode();
 
     delete gram;
 

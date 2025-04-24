@@ -1,3 +1,8 @@
+int a;
+int b, h, g;
+float ghj;
+int k = 789;
+
 int j()
 {
 	long n;

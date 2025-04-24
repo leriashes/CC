@@ -10,6 +10,8 @@ enum OBJ_TYPE {
 
 enum DATA_TYPE { NO_TYPE = 0, TYPE_INT, TYPE_SHORT, TYPE_FLOAT };
 
+enum TYPE_DECL {DQ = 8, DD = 4, DW = 2, DB = 1 };
+
 union DATA_VALUE {
 	short DataAsShort;
 	int DataAsInt;
@@ -34,6 +36,11 @@ struct Node
 	LEX id_asm;			//уникальный идентификатор
 	NData data;			//тип значения и само значение
 	FStart funcStart;	//начало функции
+
+	TYPE_DECL type;		//декларируемый тип
+	int len = 1;		//длина в единицах TYPE_DECL
+	int level;			//уровень вложенности
+	int stackAddr;		//смещение в стеке
 };
 
 class Tree			//элемент семантической таблицы
@@ -92,4 +99,10 @@ public:
 	FStart GetStart();
 	void Back();
 
+	void SetLevel(int level);
+
+	OBJ_TYPE GetObjType();
+	int GetLevel();
+	Tree* GetLeft();
+	string GenPublicName();
 };

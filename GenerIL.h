@@ -9,6 +9,9 @@ class GenerIL
 private:
 	Tree* root;
 	GlobalData* global;
+	ofstream file;
+
+	void generatePublic(Tree* node);
 
 public:
 	GenerIL(Tree* root, GlobalData* global);
@@ -42,4 +45,6 @@ public:
 	void needIntType(Operand operand);
 	void printTriadaCode();
 	string operationToSymbols(int operation);
+
+	void generateCode();
 };

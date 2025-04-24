@@ -393,3 +393,38 @@ void Tree::Back()
 	cur->left = lastleft;
 	cur = lastcur;
 }
+
+void Tree::SetLevel(int level)
+{
+	node->level = level;
+
+	if (right != NULL)
+	{
+		right->SetLevel(level + 1);
+	}
+
+	if (left != NULL)
+	{
+		left->SetLevel(level);
+	}
+}
+
+OBJ_TYPE Tree::GetObjType()
+{
+	return node->objType;
+}
+
+int Tree::GetLevel()
+{
+	return node->level;
+}
+
+Tree* Tree::GetLeft()
+{
+	return left;
+}
+
+string Tree::GenPublicName()
+{
+	return string(this->node->id_asm) + " ; " + string(this->node->id);
+}
