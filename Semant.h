@@ -31,6 +31,7 @@ struct Node
 {
 	OBJ_TYPE objType;	//тип объекта
 	LEX id;				//идентификатор объекта
+	LEX id_asm;			//уникальный идентификатор
 	NData data;			//тип значения и само значение
 	FStart funcStart;	//начало функции
 };

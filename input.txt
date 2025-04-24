@@ -1,34 +1,22 @@
-short fun()
-{
-	int i = 3 + 1;
-	i = i << 3;
-	int k = 7;
-	i = -k;
-	float fr = 2;
-	i = (fr + i);
-
-return 3.1;
-}
-
 int j()
 {
 	long n;
-	{float a, b;
-
-	b = n >> 2;}
+	{float a, b;}
 	
 	
 	while (n < 0)
 	{
 		int i;
 
-		i = 5 + -fun();
+		{short i;}
+
 		break;
 
-		{short i;}
+		i = i * i; 
+		break;
+
 	}
 	
-	return 2;
-
-	
+	return 100;
 }
+

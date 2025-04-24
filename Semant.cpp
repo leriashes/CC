@@ -1,4 +1,5 @@
 #include "Semant.h"
+#include <format>
 Tree* Tree::cur = (Tree*)NULL;
 Tree* Tree::lastcur = (Tree*)NULL;
 TScanner* Tree::scan = (TScanner*)NULL;
@@ -29,6 +30,9 @@ Tree::Tree(Tree* p, Tree* l, Tree* r, Node* data)
 	right = r;
 
 	memcpy(node, data, sizeof(Node));
+
+	string id_asm = string(node->id) + "@" + std::format("{}", static_cast<void*>(node));
+	memcpy(node->id_asm, id_asm.c_str(), id_asm.size() + 1);
 }
 
 void Tree::SetLeft(Node* data)
@@ -160,6 +164,8 @@ Tree* Tree::SemInclude(LEX a, OBJ_TYPE ot, DATA_TYPE t)
 	Node n;
 
 	memcpy(n.id, a, strlen(a) + 1);
+	string id_asm = string(a) + "@" + std::format("{}", static_cast<void*>(&n));
+	memcpy(n.id_asm, id_asm.c_str(), id_asm.size() + 1);
 	n.objType = ot;
 	n.data.type = t;
 
