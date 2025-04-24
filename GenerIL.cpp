@@ -479,6 +479,13 @@ Operand GenerIL::R()
 	result.isLink = false;
 	memcpy(result.lex, global->prevLex, strlen(global->prevLex) + 1);
 
+	Tree* var = root->FindUp(root->GetCur(), global->prevLex);
+
+	if (var != nullptr && var->GetObjType() == ObjVar)
+	{
+		var->GetAsmId(&result.lex);
+	}
+
 	return result;
 }
 

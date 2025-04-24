@@ -104,6 +104,7 @@ public:
 	OBJ_TYPE GetObjType();
 	int GetLevel();
 	Tree* GetLeft();
+	void GetAsmId(LEX* id);
 	string GenPublicName();
 	string GenPublicDecl();
 };
