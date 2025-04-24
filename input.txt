@@ -1,5 +1,5 @@
 int a;
-int b, h, g;
+short b, h, g;
 float ghj;
 int k = 789;
 

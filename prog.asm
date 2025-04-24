@@ -1,7 +1,14 @@
 _BSS SEGMENT
-PUBLIC a@0xf3e6efe780 ; a
-PUBLIC b@0x2e1998ba990 ; b
-PUBLIC h@0x2e1999121c0 ; h
-PUBLIC g@0x2e1999124f0 ; g
-PUBLIC ghj@0x2e199912820 ; ghj
-PUBLIC k@0x2e199912b50 ; k
+PUBLIC a@0x149b9ced2e0 ; a
+PUBLIC b@0x149b9cea730 ; b
+PUBLIC h@0x149b9d42f70 ; h
+PUBLIC g@0x149b9d432a0 ; g
+PUBLIC ghj@0x149b9d435d0 ; ghj
+PUBLIC k@0x149b9d43900 ; k
+
+a@0x149b9ced2e0 DQ 01H DUP(?) ; a
+b@0x149b9cea730 DW 01H DUP(?) ; b
+h@0x149b9d42f70 DW 01H DUP(?) ; h
+g@0x149b9d432a0 DW 01H DUP(?) ; g
+ghj@0x149b9d435d0 DD 01H DUP(?) ; ghj
+k@0x149b9d43900 DQ 01H DUP(?) ; k

@@ -105,4 +105,5 @@ public:
 	int GetLevel();
 	Tree* GetLeft();
 	string GenPublicName();
+	string GenPublicDecl();
 };
