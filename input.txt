@@ -1,27 +1,13 @@
 int a;
-short b, h, g;
-float ghj;
-int k = 789;
+short b, h, g = 12;
 
 int j()
 {
 	long n;
 	{float a, b;}
 	
-	
-	while (n < 0)
-	{
-		int i;
-
-		{short i;}
-
-		break;
-
-		i = i * i; 
-		break;
-
-	}
-	
 	return 100;
 }
 
+int k = 2, m = 20;
+float rq = 121.1;

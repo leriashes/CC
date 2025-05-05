@@ -2,7 +2,7 @@
 
 void GenerIL::generatePublic(Tree* node)
 {
-	if (node->GetObjType() == ObjVar && node->GetLevel() == 0)
+	if (node->GetLevel() == 0)
 	{
 		file << "PUBLIC " + node->GenPublicName() << endl;
 	}
@@ -481,7 +481,7 @@ Operand GenerIL::R()
 
 	Tree* var = root->FindUp(root->GetCur(), global->prevLex);
 
-	if (var != nullptr && var->GetObjType() == ObjVar)
+	if (var != nullptr)
 	{
 		var->GetAsmId(&result.lex);
 	}
