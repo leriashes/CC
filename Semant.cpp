@@ -442,6 +442,11 @@ void Tree::GetAsmId(LEX* id)
 	memcpy(*id, node->id_asm, strlen(node->id_asm) + 1);
 }
 
+string Tree::GetAsmId()
+{
+	return string(node->id_asm);
+}
+
 string Tree::GenPublicName()
 {
 	return string(this->node->id_asm) + " ; " + string(this->node->id);

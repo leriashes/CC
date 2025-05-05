@@ -105,6 +105,7 @@ public:
 	int GetLevel();
 	Tree* GetLeft();
 	void GetAsmId(LEX* id);
+	string GetAsmId();
 	string GenPublicName();
 	string GenPublicDecl();
 };

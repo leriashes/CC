@@ -10,4 +10,9 @@ int j()
 }
 
 int k = 2, m = 20;
+
+int myf()
+{
+}
+
 float rq = 121.1;

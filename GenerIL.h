@@ -13,6 +13,7 @@ private:
 
 	void generatePublic(Tree* node);
 	void generateDeclVars(Tree* node);
+	void generateFunctions(Tree* node);
 
 public:
 	GenerIL(Tree* root, GlobalData* global);

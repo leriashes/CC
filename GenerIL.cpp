@@ -26,6 +26,22 @@ void GenerIL::generateDeclVars(Tree* node)
 	}
 }
 
+void GenerIL::generateFunctions(Tree* node)
+{
+	if (node->GetObjType() == ObjFunct && node->GetLevel() == 0)
+	{
+		file << endl << "_TEXT SEGMENT" << endl;
+		file << node->GetAsmId() << " PROC" << endl;
+		file << node->GetAsmId() << " ENDP" << endl;
+		file << "_TEXT ENDS" << endl;
+	}
+
+	if (node->GetLeft() != NULL)
+	{
+		generateFunctions(node->GetLeft());
+	}
+}
+
 GenerIL::GenerIL(Tree* root, GlobalData* global)
 {
 	this->root = root;
@@ -653,6 +669,10 @@ void GenerIL::generateCode()
 		file << endl;
 
 		generateDeclVars(root);
+
+		file << endl;
+
+		generateFunctions(root);
 
 		file.close();
 	}
