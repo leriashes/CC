@@ -3,16 +3,17 @@ short b, h, g = 12;
 
 int j()
 {
-	long n;
-	{float a, b;}
-	
+	long n = 2+ 1, fh = 3;
+	{float a = 1, b = 12, n = 121; {int n = 32; long n5 = 5+ 1, fh = 3; }}
+
 	return 100;
 }
 
 int k = 2, m = 20;
 
-int myf()
+int main()
 {
+	return 0;
 }
 
 float rq = 121.1;

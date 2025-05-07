@@ -1,4 +1,4 @@
-ï»¿#include <iostream>
+#include <iostream>
 #include "LL1.h"
 
 int main(int argc, char* argv[])
@@ -20,14 +20,14 @@ int main(int argc, char* argv[])
 
     if (type != TEnd)
     {
-        scan->PrintError("Ð›Ð¸ÑˆÐ½Ð¸Ð¹ Ñ‚ÐµÐºÑÑ‚ Ð² ÐºÐ¾Ð½Ñ†Ðµ Ð¿Ñ€Ð¾Ð³Ñ€Ð°Ð¼Ð¼Ñ‹");
+        scan->PrintError("Ëèøíèé òåêñò â êîíöå ïðîãðàììû");
     }
     else
     {
-        printf("\n\nÐžÑˆÐ¸Ð±ÐºÐ¸ Ð½Ðµ Ð½Ð°Ð¹Ð´ÐµÐ½Ñ‹.\n\n");
+        printf("\n\nÎøèáêè íå íàéäåíû.\n\n");
     }
 
-    printf("\n\n\nÐ¡Ð•ÐœÐÐÐ¢Ð˜Ð§Ð•Ð¡ÐšÐžÐ• Ð”Ð•Ð Ð•Ð’Ðž\n\n");
+    printf("\n\n\nÑÅÌÀÍÒÈ×ÅÑÊÎÅ ÄÅÐÅÂÎ\n\n");
     gram->PrintTree();
     gram->PrintTriada();
     gram->GenCode();

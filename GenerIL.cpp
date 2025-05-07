@@ -31,6 +31,7 @@ void GenerIL::generateFunctions(Tree* node)
 	if (node->GetObjType() == ObjFunct && node->GetLevel() == 0)
 	{
 		file << endl << "_TEXT SEGMENT" << endl;
+		generateLocals(node->GetRight()->GetLeft(), 0);
 		file << node->GetAsmId() << " PROC" << endl;
 		file << node->GetAsmId() << " ENDP" << endl;
 		file << "_TEXT ENDS" << endl;
@@ -39,6 +40,30 @@ void GenerIL::generateFunctions(Tree* node)
 	if (node->GetLeft() != NULL)
 	{
 		generateFunctions(node->GetLeft());
+	}
+}
+
+void GenerIL::generateLocals(Tree* node, int offs)
+{
+	if (node != NULL)
+	{
+		if (node->GetObjType() == Empty) 
+		{
+			generateLocals(node->GetRight()->GetLeft(), offs);
+		}
+		else
+		{
+
+			file << node->GetId() << "$";
+			if (node->GetLevel() > 2)
+				file << node->GetLevel() - 2;
+			//offs += node->GetSize();
+			if (offs % node->GetSize() != 0)
+				offs += node->GetSize() - (offs % node->GetSize());
+			offs += node->GetSize();
+			file << " = " << offs << endl;
+			generateLocals(node->GetLeft(), offs);
+		}
 	}
 }
 
