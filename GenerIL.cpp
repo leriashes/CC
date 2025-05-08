@@ -2,7 +2,7 @@
 
 void GenerIL::generatePublic(Tree* node)
 {
-	if (node->GetLevel() == 0)
+	if (node != NULL && node->GetLevel() == 0)
 	{
 		file << "PUBLIC " + node->GenPublicName() << endl;
 	}
@@ -55,12 +55,7 @@ void GenerIL::generateLocals(Tree* node, int offs)
 		}
 		else
 		{
-			file << node->GetId() << "$";
-			if (node->GetLevel() > 2)
-				file << node->GetLevel() - 2;
-			if (offs % node->GetSize() != 0)
-				offs += node->GetSize() - abs(offs % node->GetSize());
-			file << " = " << offs << "        ; size = " << node->GetSize() << endl;
+			file << node->GetAsmId() << " = " << offs << "        ; size = " << node->GetSize() << endl;
 			offs += node->GetSize();
 			generateLocals(node->GetLeft(), offs);
 		}
@@ -73,12 +68,12 @@ void GenerIL::generateCommands()
 	{
 		Triada triada = global->code[i];
 
-		if (!triada.operand1.isLink && (triada.operation < intToFloat || triada.operation == ifOper))
+		if (!triada.operand1.isLink&& triada.operation >= TPlus && triada.operation <= TDiv)
 		{
 			if (triada.operand1.isConst)
 				file << "mov eax, " << triada.operand1.lex << endl;
 			else
-				file << "mov eax, [" << triada.operand1.lex << "]" << endl;
+				file << "mov eax, [" << triada.operand1.node->GetAsmId() << "]" << endl;
 		}
 
 		if (triada.operation < intToFloat || triada.operation == ifOper)
@@ -86,24 +81,32 @@ void GenerIL::generateCommands()
 			if (triada.operation == TMinus)
 			{
 				file << "sub ";
+				file << "eax, ";
 			}
 			else if (triada.operation == TPlus)
 			{
 				file << "add ";
+				file << "eax, ";
+			}
+			else if (triada.operation == TMult)
+			{
+				file << "imul ";
+			}
+			else if (triada.operation == TDiv)
+			{
+				file << "idiv ";
 			}
 			else
 			{
 				continue;
 			}
 
-			file << "eax, ";
-
 			if (triada.operand2.isLink)
 				file << "ebx" << endl;
 			else if (triada.operand2.isConst)
 				file << triada.operand2.lex << endl;
 			else
-				file << "[" << triada.operand2.lex << "]" << endl;
+				file << "[" << triada.operand2.node->GetAsmId() << "]" << endl;
 		}
 		
 	}
@@ -599,6 +602,8 @@ Operand GenerIL::R()
 	{
 		var->GetAsmId(&result.lex);
 	}
+
+	result.node = var;
 
 	return result;
 }
