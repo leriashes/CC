@@ -15,6 +15,7 @@ private:
 	void generateDeclVars(Tree* node);
 	void generateFunctions(Tree* node);
 	void generateLocals(Tree* node, int offs);
+	int countLocals(Tree* node, int offs);
 
 public:
 	GenerIL(Tree* root, GlobalData* global);
@@ -22,6 +23,7 @@ public:
 	void deltaGener(int operation);
 	void deltaGenerUnar(int operation);
 	void deltaPushType();
+	void deltaPushConstType();
 	void deltaPushRes(Operand result);
 	void deltaSetAddr();
 	void deltaGenerIf();

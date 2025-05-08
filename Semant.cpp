@@ -464,7 +464,7 @@ int Tree::GetSize()
 
 string Tree::GenPublicName()
 {
-	return string(this->node->id_asm) + " ; " + string(this->node->id);
+	return string(this->node->id_asm) + "        ; " + string(this->node->id);
 }
 
 string Tree::GenPublicDecl()
@@ -486,5 +486,5 @@ string Tree::GenPublicDecl()
 		break;
 	}
 
-	return string(this->node->id_asm) + " " + type + " " + std::format("0{:X}H", node->len) + " DUP(?) ; " + string(this->node->id);
+	return string(this->node->id_asm) + " " + type + " " + std::format("0{:X}H", node->len) + " DUP(?)        ; " + string(this->node->id);
 }

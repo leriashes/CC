@@ -561,7 +561,7 @@ int LL1::LL_1() //функция синтаксического анализатора
 
 			case sem_constType:
 				translate->deltaConstType(mag[z + 1]);
-				genIL->deltaPushType();
+				genIL->deltaPushConstType();
 				genIL->deltaPushRes(genIL->R(mag[z + 1]));
 				break;
 

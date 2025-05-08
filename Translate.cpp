@@ -55,7 +55,7 @@ void Translate::deltaGetFunct()
 void Translate::deltaConstType(int constTerm)
 {
 	if (constTerm == TConstInt)
-		global->dataType = TYPE_INT;
+		global->constType = TYPE_INT;
 	else
-		global->dataType = TYPE_FLOAT;
+		global->constType = TYPE_FLOAT;
 }

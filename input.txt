@@ -1,9 +1,21 @@
 int a;
 short b, h, g = 12;
 
+int jk()
+{
+	long n;
+float k2;
+short k;
+
+	return 100;
+}
+
+
 int j()
 {
 	long n = 2+ 1, fh = 3;
+float k2;
+short k;
 	{float a = 1, b = 12, n = 121; {int n = 32; long n5 = 5+ 1, fh = 3; }}
 
 	return 100;

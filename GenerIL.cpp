@@ -30,8 +30,9 @@ void GenerIL::generateFunctions(Tree* node)
 {
 	if (node->GetObjType() == ObjFunct && node->GetLevel() == 0)
 	{
+		int offs = countLocals(node->GetRight()->GetLeft(), 0);
 		file << endl << "_TEXT SEGMENT" << endl;
-		generateLocals(node->GetRight()->GetLeft(), 0);
+		generateLocals(node->GetRight()->GetLeft(), -offs);
 		file << node->GetAsmId() << " PROC" << endl;
 		file << node->GetAsmId() << " ENDP" << endl;
 		file << "_TEXT ENDS" << endl;
@@ -57,14 +58,39 @@ void GenerIL::generateLocals(Tree* node, int offs)
 			file << node->GetId() << "$";
 			if (node->GetLevel() > 2)
 				file << node->GetLevel() - 2;
-			//offs += node->GetSize();
 			if (offs % node->GetSize() != 0)
-				offs += node->GetSize() - (offs % node->GetSize());
+				offs += node->GetSize() - abs(offs % node->GetSize());
+			file << " = " << offs << "        ; size = " << node->GetSize() << endl;
 			offs += node->GetSize();
-			file << " = " << offs << endl;
 			generateLocals(node->GetLeft(), offs);
 		}
 	}
+}
+
+int GenerIL::countLocals(Tree* node, int offs)
+{
+	int t = 0;
+
+	if (node != NULL)
+	{
+		if (node->GetObjType() == Empty)
+		{
+			t += countLocals(node->GetRight()->GetLeft(), offs);
+		}
+		else
+		{
+			t = node->GetSize();
+			if (offs % node->GetSize() != 0)
+			{
+				int delta = node->GetSize() - (offs % node->GetSize());
+				t += delta;
+			}
+			offs += t;
+			t += countLocals(node->GetLeft(), offs);
+		}
+	}
+
+	return t;
 }
 
 GenerIL::GenerIL(Tree* root, GlobalData* global)
@@ -129,6 +155,11 @@ void GenerIL::deltaGenerUnar(int operation)
 void GenerIL::deltaPushType()
 {
 	global->t.push_back(global->dataType);
+}
+
+void GenerIL::deltaPushConstType()
+{
+	global->t.push_back(global->constType);
 }
 
 void GenerIL::deltaPushRes(Operand result)
