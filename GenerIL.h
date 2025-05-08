@@ -15,6 +15,7 @@ private:
 	void generateDeclVars(Tree* node);
 	void generateFunctions(Tree* node);
 	void generateLocals(Tree* node, int offs);
+	void generateCommands();
 	int countLocals(Tree* node, int offs);
 
 public:

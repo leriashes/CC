@@ -34,6 +34,7 @@ void GenerIL::generateFunctions(Tree* node)
 		file << endl << "_TEXT SEGMENT" << endl;
 		generateLocals(node->GetRight()->GetLeft(), -offs);
 		file << node->GetAsmId() << " PROC" << endl;
+		generateCommands();
 		file << node->GetAsmId() << " ENDP" << endl;
 		file << "_TEXT ENDS" << endl;
 	}
@@ -54,7 +55,6 @@ void GenerIL::generateLocals(Tree* node, int offs)
 		}
 		else
 		{
-
 			file << node->GetId() << "$";
 			if (node->GetLevel() > 2)
 				file << node->GetLevel() - 2;
@@ -64,6 +64,48 @@ void GenerIL::generateLocals(Tree* node, int offs)
 			offs += node->GetSize();
 			generateLocals(node->GetLeft(), offs);
 		}
+	}
+}
+
+void GenerIL::generateCommands()
+{
+	for (int i = 0; i < global->k; i++)
+	{
+		Triada triada = global->code[i];
+
+		if (!triada.operand1.isLink && (triada.operation < intToFloat || triada.operation == ifOper))
+		{
+			if (triada.operand1.isConst)
+				file << "mov eax, " << triada.operand1.lex << endl;
+			else
+				file << "mov eax, [" << triada.operand1.lex << "]" << endl;
+		}
+
+		if (triada.operation < intToFloat || triada.operation == ifOper)
+		{
+			if (triada.operation == TMinus)
+			{
+				file << "sub ";
+			}
+			else if (triada.operation == TPlus)
+			{
+				file << "add ";
+			}
+			else
+			{
+				continue;
+			}
+
+			file << "eax, ";
+
+			if (triada.operand2.isLink)
+				file << "ebx" << endl;
+			else if (triada.operand2.isConst)
+				file << triada.operand2.lex << endl;
+			else
+				file << "[" << triada.operand2.lex << "]" << endl;
+		}
+		
 	}
 }
 

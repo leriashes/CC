@@ -32,10 +32,10 @@ int LL1::LL_1() //функция синтаксического анализатора
 					t = scan->Scanner(lex);
 				}
 
-				if (t >= TSave && t <= TMod)
+				/*if (t >= TSave && t <= TMod)
 				{
 					genIL->saveOperator(t);
-				}
+				}*/
 			}
 			else
 			{
@@ -154,6 +154,8 @@ int LL1::LL_1() //функция синтаксического анализатора
 					mag[z++] = TSave;
 					mag[z++] = sem_push;
 					mag[z++] = sem_setIdent;
+
+					genIL->saveOperator(t);
 				}
 				else
 				{
@@ -301,6 +303,8 @@ int LL1::LL_1() //функция синтаксического анализатора
 					mag[z++] = TSave;
 					mag[z++] = sem_push;
 					mag[z++] = sem_getVar;
+
+					genIL->saveOperator(t);
 				}
 				else
 				{
@@ -329,6 +333,8 @@ int LL1::LL_1() //функция синтаксического анализатора
 					mag[z++] = sem_match;
 					mag[z++] = neterm_Z;
 					mag[z++] = t;
+
+					genIL->saveOperator(t);
 				}
 				else
 				{
@@ -348,11 +354,13 @@ int LL1::LL_1() //функция синтаксического анализатора
 				// Z1 -> < Y match gener Z1 | <= Y match gener Z1 | > Y match gener Z1 | >= Y match gener Z1 | eps
 				if (t == TLT || t == TGT || t == TLE || t == TGE)
 				{
-					mag[z++] = neterm_V1;
+					mag[z++] = neterm_Z1;
 					mag[z++] = sem_gener;
 					mag[z++] = sem_match;
-					mag[z++] = neterm_Z;
+					mag[z++] = neterm_Y;
 					mag[z++] = t;
+
+					genIL->saveOperator(t);
 				}
 				else
 				{
@@ -377,6 +385,8 @@ int LL1::LL_1() //функция синтаксического анализатора
 					mag[z++] = sem_matchInt;
 					mag[z++] = neterm_L;
 					mag[z++] = t;
+
+					genIL->saveOperator(t);
 				}
 				else
 				{
@@ -401,6 +411,8 @@ int LL1::LL_1() //функция синтаксического анализатора
 					mag[z++] = sem_match;
 					mag[z++] = neterm_M;
 					mag[z++] = t;
+
+					genIL->saveOperator(t);
 				}
 				else
 				{
@@ -425,6 +437,8 @@ int LL1::LL_1() //функция синтаксического анализатора
 					mag[z++] = sem_match;
 					mag[z++] = neterm_N;
 					mag[z++] = t;
+
+					genIL->saveOperator(t);
 				}
 				else if (t == TMod)
 				{
@@ -433,6 +447,8 @@ int LL1::LL_1() //функция синтаксического анализатора
 					mag[z++] = sem_matchInt;
 					mag[z++] = neterm_N;
 					mag[z++] = t;
+
+					genIL->saveOperator(t);
 				}
 				else
 				{
@@ -449,6 +465,8 @@ int LL1::LL_1() //функция синтаксического анализатора
 					mag[z++] = sem_generUnar;
 					mag[z++] = neterm_J;
 					mag[z++] = t;
+
+					genIL->saveOperator(t);
 				}
 				else
 				{

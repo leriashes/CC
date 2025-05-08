@@ -172,7 +172,7 @@ Tree* Tree::SemInclude(LEX a, OBJ_TYPE ot, DATA_TYPE t)
 		n.type = DW;
 		break;
 	case TYPE_INT:
-		n.type = DQ;
+		n.type = DD;
 		break;
 	case TYPE_FLOAT:
 		n.type = DD;
