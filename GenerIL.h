@@ -18,6 +18,8 @@ private:
 	void generateCommands();
 	int countLocals(Tree* node, int offs);
 
+	string getOperand(Operand operand);
+
 public:
 	GenerIL(Tree* root, GlobalData* global);
 

@@ -385,6 +385,11 @@ DATA_VALUE* Tree::GetValue()
 	return &(node->data.value);
 }
 
+TYPE_DECL Tree::GetTypeDecl()
+{
+	return node->type;
+}
+
 void Tree::SetStart(int uk, int line, int pos)
 {
 	node->funcStart.uk = uk;
@@ -495,4 +500,14 @@ string Tree::GenPublicDecl()
 	}
 
 	return string(this->node->id_asm) + " " + type + " " + std::format("0{:X}H", node->len) + " DUP(?)        ; " + string(this->node->id);
+}
+
+void Tree::SetOffset(int offs)
+{
+	node->stackAddr = offs;
+}
+
+int Tree::GetOffset()
+{
+	return node->stackAddr;
 }

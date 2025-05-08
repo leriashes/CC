@@ -96,6 +96,8 @@ public:
 
 	DATA_VALUE* GetValue();
 
+	TYPE_DECL GetTypeDecl();
+
 	void SetStart(int uk, int line, int pos);
 	FStart GetStart();
 	void Back();
@@ -112,4 +114,7 @@ public:
 	int GetSize();
 	string GenPublicName();
 	string GenPublicDecl();
+
+	void SetOffset(int offs);
+	int GetOffset();
 };
