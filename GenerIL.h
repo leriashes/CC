@@ -4,6 +4,7 @@
 #include "Translate.h"
 #include <deque>
 #include <vector>
+#include <map>
 
 typedef pair<string, bool> RegInfo;
 
@@ -16,6 +17,7 @@ private:
 	int pc;
 
 	vector<RegInfo> intReg;
+	map<string, int> regToTriad;
 
 
 	void generatePublic(Tree* node);
@@ -31,7 +33,7 @@ private:
 	string getIntReg();
 	void freeIntReg(string reg_name);
 
-
+	void reservIntReg(string reg_name);
 public:
 	GenerIL(Tree* root, GlobalData* global);
 

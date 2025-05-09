@@ -13,7 +13,7 @@ struct Operand
 
 struct Result
 {
-	LEX nameResult; //имя регистра или области памяти
+	string nameResult; //имя регистра или области памяти
 	bool flagRegister; //признак хранения результата в регистре
 };
 
