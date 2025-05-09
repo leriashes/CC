@@ -3,6 +3,9 @@
 #include "Semant.h"
 #include "Translate.h"
 #include <deque>
+#include <vector>
+
+typedef pair<string, bool> RegInfo;
 
 class GenerIL
 {
@@ -10,6 +13,9 @@ private:
 	Tree* root;
 	GlobalData* global;
 	ofstream file;
+
+	vector<RegInfo> intReg;
+
 
 	void generatePublic(Tree* node);
 	void generateDeclVars(Tree* node);
@@ -19,6 +25,11 @@ private:
 	int countLocals(Tree* node, int offs);
 
 	string getOperand(Operand operand);
+
+	void initRegisters();
+	string getIntReg();
+	void freeIntReg(string reg_name);
+
 
 public:
 	GenerIL(Tree* root, GlobalData* global);
