@@ -13,13 +13,14 @@ private:
 	Tree* root;
 	GlobalData* global;
 	ofstream file;
+	int pc;
 
 	vector<RegInfo> intReg;
 
 
 	void generatePublic(Tree* node);
 	void generateDeclVars(Tree* node);
-	void generateFunctions(Tree* node);
+	void generateFunctions();
 	void generateLocals(Tree* node, int offs);
 	void generateCommands();
 	int countLocals(Tree* node, int offs);

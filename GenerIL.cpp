@@ -26,9 +26,25 @@ void GenerIL::generateDeclVars(Tree* node)
 	}
 }
 
-void GenerIL::generateFunctions(Tree* node)
+void GenerIL::generateFunctions()
 {
-	if (node->GetObjType() == ObjFunct && node->GetLevel() == 0)
+	for (pc = 0; pc < global->k; pc++)
+	{
+		if (global->code[pc].operation == procOper)
+		{
+			Tree* node = global->code[pc].operand1.node;
+			int offs = countLocals(node->GetRight()->GetLeft(), 0);
+
+			file << endl << "_TEXT SEGMENT" << endl;
+			generateLocals(node->GetRight()->GetLeft(), -offs);
+			file << node->GetAsmId() << " PROC" << endl;
+			generateCommands();
+			file << node->GetAsmId() << " ENDP" << endl;
+			file << "_TEXT ENDS" << endl;
+		}
+	}
+
+	/*if (node->GetObjType() == ObjFunct && node->GetLevel() == 0)
 	{
 		int offs = countLocals(node->GetRight()->GetLeft(), 0);
 		file << endl << "_TEXT SEGMENT" << endl;
@@ -42,7 +58,7 @@ void GenerIL::generateFunctions(Tree* node)
 	if (node->GetLeft() != NULL)
 	{
 		generateFunctions(node->GetLeft());
-	}
+	}*/
 }
 
 void GenerIL::generateLocals(Tree* node, int offs)
@@ -65,9 +81,14 @@ void GenerIL::generateLocals(Tree* node, int offs)
 
 void GenerIL::generateCommands()
 {
-	for (int i = 0; i < global->k; i++)
-	{
-		Triada triada = global->code[i];
+	for (; pc < global->k; pc++)
+	{ 
+		Triada triada = global->code[pc];
+
+		if (triada.operation == endpOper)
+		{
+			break;
+		}
 
 		if (!triada.operand1.isLink&& triada.operation >= TPlus && triada.operation <= TDiv)
 		{
@@ -838,7 +859,7 @@ void GenerIL::generateCode()
 
 		file << endl;
 
-		generateFunctions(root);
+		generateFunctions();
 
 		file.close();
 	}
