@@ -5,6 +5,7 @@
 #include <deque>
 #include <vector>
 #include <map>
+#include <set>
 
 typedef pair<string, bool> RegInfo;
 
@@ -24,8 +25,11 @@ private:
 	void generateDeclVars(Tree* node);
 	void generateFunctions();
 	void generateLocals(Tree* node, int offs);
-	void generateCommands();
+	void generateCommands(string funcname);
 	int countLocals(Tree* node, int offs);
+
+	string getFirstOperand(Triada* triada);
+	void printSecondOperand(Triada* triada);
 
 	string getOperand(Operand operand);
 

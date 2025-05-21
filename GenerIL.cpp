@@ -35,33 +35,32 @@ void GenerIL::generateFunctions()
 			Tree* node = global->code[pc].operand1.node;
 			int offs = countLocals(node->GetRight()->GetLeft(), 0);
 
-			file << endl << "_TEXT SEGMENT" << endl;
+			file << endl << endl << "_TEXT SEGMENT" << endl;
 			generateLocals(node->GetRight()->GetLeft(), -offs);
 			file << node->GetAsmId() << " PROC" << endl;
 
-			file << "push ebp" << endl;
-			file << "mov ebp, esp" << endl;
-			file << "and esp, -8" << endl;
-			file << "sub esp, " << offs << endl;
-			file << "push eax" << endl;
-			file << "push ebx" << endl;			
-			file << "push ecx" << endl;
-			file << "push edx" << endl;
-			file << "push esi" << endl;
-			file << "push edi" << endl;
+			file << "    push ebp" << endl;
+			file << "    mov ebp, esp" << endl;
+			file << "    and esp, -8" << endl;
+			file << "    sub esp, " << offs << endl;
+			file << "    push eax" << endl;
+			file << "    push ebx" << endl;			
+			file << "    push ecx" << endl;
+			file << "    push edx" << endl;
+			file << "    push esi" << endl;
+			file << "    push edi" << endl;
 
-			generateCommands();
+			generateCommands(node->GetAsmId());
 
-			file << node->GetAsmId() <<  "_end:" << endl;
-			file << "pop eax" << endl;
-			file << "pop ebx" << endl;
-			file << "pop ecx" << endl;
-			file << "pop edx" << endl;
-			file << "pop esi" << endl;
-			file << "pop edi" << endl;
-			file << "mov esp, epb" << endl;
-			file << "pop ebp" << endl;
-			file << "ret 0" << endl;
+			file << "    pop eax" << endl;
+			file << "    pop ebx" << endl;
+			file << "    pop ecx" << endl;
+			file << "    pop edx" << endl;
+			file << "    pop esi" << endl;
+			file << "    pop edi" << endl;
+			file << "    mov esp, epb" << endl;
+			file << "    pop ebp" << endl;
+			file << "    ret 0" << endl;
 
 			file << node->GetAsmId() << " ENDP" << endl;
 			file << "_TEXT ENDS" << endl;
@@ -88,9 +87,10 @@ void GenerIL::generateLocals(Tree* node, int offs)
 	}
 }
 
-void GenerIL::generateCommands()
+void GenerIL::generateCommands(string funcname)
 {
 	initRegisters();
+	set<int> labels;
 
 	for (; pc < global->k; pc++)
 	{ 
@@ -103,82 +103,134 @@ void GenerIL::generateCommands()
 
 		string reg;
 
-		if (triada->operation == TDiv)
+		switch (triada->operation)
 		{
+		case epilogOper:
+			file << "$LN" << pc + 1 << "@" << funcname << ":" << endl;
+			break;
+
+		case TSave:
+			file << "$LN" << pc + 1 << "@" << funcname << ":" << endl;
+			file << "    mov " << getOperand(triada->operand1) << ", ";
+			printSecondOperand(triada);
+			file << endl;
+			break;
+
+		case TEq:
+			file << "$LN" << pc + 1 << "@" << funcname << ":" << endl;
+			reg = getFirstOperand(triada);
+			file << "    cmp " << reg << ", ";
+			printSecondOperand(triada);
+			file << "    jne $LN" << global->code[pc + 1].operand2.number + 1 << "@" << funcname << endl;
+			labels.insert(global->code[pc + 1].operand2.number);
+			file << endl;
+			break;
+
+		case TNEq:
+			file << "$LN" << pc + 1 << "@" << funcname << ":" << endl;
+			reg = getFirstOperand(triada);
+			file << "    cmp " << reg << ", ";
+			printSecondOperand(triada);
+			file << "    je $LN" << global->code[pc + 1].operand2.number + 1 << "@" << funcname << endl;
+			labels.insert(global->code[pc + 1].operand2.number);
+			file << endl;
+			break;
+
+		case TLT:
+			file << "$LN" << pc + 1 << "@" << funcname << ":" << endl;
+			reg = getFirstOperand(triada);
+			file << "    cmp " << reg << ", ";
+			printSecondOperand(triada);
+			file << "    jge $LN" << global->code[pc + 1].operand2.number + 1 << "@" << funcname << endl;
+			labels.insert(global->code[pc + 1].operand2.number);
+			file << endl;
+			break;
+
+		case TGT:
+			file << "$LN" << pc + 1 << "@" << funcname << ":" << endl;
+			reg = getFirstOperand(triada);
+			file << "    cmp " << reg << ", ";
+			printSecondOperand(triada);
+			file << "    jle $LN" << global->code[pc + 1].operand2.number + 1 << "@" << funcname << endl;
+			labels.insert(global->code[pc + 1].operand2.number);
+			file << endl;
+			break;
+
+		case TLE:
+			file << "$LN" << pc + 1 << "@" << funcname << ":" << endl;
+			reg = getFirstOperand(triada);
+			file << "    cmp " << reg << ", ";
+			printSecondOperand(triada);
+			file << "    jg $LN" << global->code[pc + 1].operand2.number + 1 << "@" << funcname << endl;
+			labels.insert(global->code[pc + 1].operand2.number);
+			file << endl;
+			break;
+
+		case TGE:
+			file << "$LN" << pc + 1 << "@" << funcname << ":" << endl;
+			reg = getFirstOperand(triada);
+			file << "    cmp " << reg << ", ";
+			printSecondOperand(triada);
+			file << "    jl $LN" << global->code[pc + 1].operand2.number + 1 << "@" << funcname << endl;
+			labels.insert(global->code[pc + 1].operand2.number);
+			file << endl;
+			break;
+
+		case TPlus:
+			file << "$LN" << pc + 1 << "@" << funcname << ":" << endl;
+			reg = getFirstOperand(triada);
+			file << "    add "<< reg << ", ";
+			printSecondOperand(triada);
+			file << endl;
+			break;
+
+		case TMinus:
+			file << "$LN" << pc + 1 << "@" << funcname << ":" << endl;
+			reg = getFirstOperand(triada);
+			file << "    sub " << reg << ", ";
+			printSecondOperand(triada);
+			file << endl;
+			break;
+
+		case TMult:
+			file << "$LN" << pc + 1 << "@" << funcname << ":" << endl;
+			reg = getFirstOperand(triada);
+			file << "    imul "<< reg << ", ";
+			printSecondOperand(triada);
+			file << endl;
+			break;
+
+		case TDiv:
+			file << "$LN" << pc + 1 << "@" << funcname << ":" << endl;
 			reservIntReg("eax");
 			reservIntReg("edx");
-			file << "cdq" << endl;
-		}
+			file << "    cdq" << endl;
 
-		if (!triada->operand1.isLink)
-		{
-			if (triada->operation >= TPlus && triada->operation <= TDiv)
-			{
-				if (triada->operation == TDiv)
-				{
-					reg = "eax";
-				}
-				else
-				{
-					reg = getIntReg();
-				}
+			getFirstOperand(triada);
+			freeIntReg("edx");
+			file << "    idiv ";
+			printSecondOperand(triada);
+			file << endl;
+			break;
 
-				triada->result.nameResult = reg;
-				triada->result.flagRegister = true;
-				regToTriad[reg] = pc;
+		case TMod:
+			file << "$LN" << pc + 1 << "@" << funcname << ":" << endl;
+			reservIntReg("eax");
+			reservIntReg("edx");
+			file << "    cdq" << endl;
 
-				file << "mov " << reg << ", " << getOperand(triada->operand1) << endl;
-			}
-		}
-		else
-		{
-			if (triada->operation >= TPlus && triada->operation <= TDiv)
-			{
-				reg = global->code[triada->operand1.number].result.nameResult;
-				triada->result.nameResult = reg;
-				triada->result.flagRegister = true;
-				regToTriad[reg] = pc;
-			}
-		}
+			getFirstOperand(triada);
+			file << "    idiv ";
+			freeIntReg("eax");
+			printSecondOperand(triada);
+			file << endl;
+			break;
 
-		if (triada->operation < intToFloat || triada->operation == ifOper)
-		{
-			if (triada->operation == TMinus)
-			{
-				file << "sub ";
-				file << reg << ", ";
-			}
-			else if (triada->operation == TPlus)
-			{
-				file << "add ";
-				file << reg << ", ";
-			}
-			else if (triada->operation == TMult)
-			{
-				file << "imul ";
-				file << reg << ", ";
-			}
-			else if (triada->operation == TDiv)
-			{
-				file << "idiv ";
-				freeIntReg("edx");
-			}
-			else
-			{
-				continue;
-			}
-
-			if (triada->operand2.isLink)
-			{
-				if (global->code[triada->operand2.number].result.flagRegister)
-				{
-					reg = global->code[triada->operand2.number].result.nameResult;
-					file << reg << endl;
-					freeIntReg(reg);
-				}
-			}
-			else
-				file << getOperand(triada->operand2) << endl;
+		case gotoOper:
+			file << "$LN" << pc + 1 << "@" << funcname << ":" << endl;
+			file << "    jmp $LN" << triada->operand1.number + 1 << "@" << funcname << endl;
+			file << endl;
+			break;
 		}
 		
 	}
@@ -210,6 +262,55 @@ int GenerIL::countLocals(Tree* node, int offs)
 	return t;
 }
 
+string GenerIL::getFirstOperand(Triada* triada)
+{
+	string reg;
+
+	if (!triada->operand1.isLink)
+	{
+		if (triada->operation == TDiv || triada->operation == TMod)
+		{
+			reg = "eax";
+		}
+		else
+		{
+			reg = getIntReg();
+		}
+
+		triada->result.nameResult = reg;
+		triada->result.flagRegister = true;
+		regToTriad[reg] = pc;
+
+		file << "    mov " << reg << ", " << getOperand(triada->operand1) << endl;
+	}
+	else
+	{
+		reg = global->code[triada->operand1.number].result.nameResult;
+		triada->result.nameResult = reg;
+		triada->result.flagRegister = true;
+		regToTriad[reg] = pc;
+	}
+
+	return reg;
+}
+
+void GenerIL::printSecondOperand(Triada* triada)
+{
+	string reg;
+
+	if (triada->operand2.isLink)
+	{
+		if (global->code[triada->operand2.number].result.flagRegister)
+		{
+			reg = global->code[triada->operand2.number].result.nameResult;
+			file << reg << endl;
+			freeIntReg(reg);
+		}
+	}
+	else
+		file << getOperand(triada->operand2) << endl;
+}
+
 string GenerIL::getOperand(Operand operand)
 {
 	if (operand.isConst)
@@ -235,7 +336,7 @@ string GenerIL::getOperand(Operand operand)
 			break;
 		}
 
-		return type + " PTR " + operand.node->GetAsmId() + "[ebp - " + to_string(abs(operand.node->GetOffset())) + "]";
+		return type + " PTR " + operand.node->GetAsmId() + "[ebp]";
 	}
 	else
 	{
@@ -294,7 +395,7 @@ void GenerIL::reservIntReg(string reg_name)
 				}
 				global->code[triadIndex].result.nameResult = new_reg;
 
-				file << "mov " << new_reg << ", " << reg_name << endl;
+				file << "    mov " << new_reg << ", " << reg_name << endl;
 			}
 			else
 			{

@@ -7,6 +7,17 @@ int func1 ()
 {int k =1;}
 int yu = 100;
 	b = kb / b * 10 + 2;
+
+while (1 < 2)
+{b = 100 - 900;
+while (b != 200)
+{
+b = b + 20;
+break;
+}
+}
+
+return 3;
 }
 
 int func2 ()
@@ -18,5 +29,5 @@ int func2 ()
 
 int func3 ()
 {
-	a = b + c * a - b / c;
+	a = b + c * a - b / c % 2;
 }
