@@ -38,7 +38,31 @@ void GenerIL::generateFunctions()
 			file << endl << "_TEXT SEGMENT" << endl;
 			generateLocals(node->GetRight()->GetLeft(), -offs);
 			file << node->GetAsmId() << " PROC" << endl;
+
+			file << "push ebp" << endl;
+			file << "mov ebp, esp" << endl;
+			file << "and esp, -8" << endl;
+			file << "sub esp, " << offs << endl;
+			file << "push eax" << endl;
+			file << "push ebx" << endl;			
+			file << "push ecx" << endl;
+			file << "push edx" << endl;
+			file << "push esi" << endl;
+			file << "push edi" << endl;
+
 			generateCommands();
+
+			file << node->GetAsmId() <<  "_end:" << endl;
+			file << "pop eax" << endl;
+			file << "pop ebx" << endl;
+			file << "pop ecx" << endl;
+			file << "pop edx" << endl;
+			file << "pop esi" << endl;
+			file << "pop edi" << endl;
+			file << "mov esp, epb" << endl;
+			file << "pop ebp" << endl;
+			file << "ret 0" << endl;
+
 			file << node->GetAsmId() << " ENDP" << endl;
 			file << "_TEXT ENDS" << endl;
 		}

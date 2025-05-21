@@ -1,48 +1,22 @@
-int a;
+int a, b, c;
 
-int func ()
+int func1 ()
 {
-	int k = 2 * (-12 - 1), b;
-	a = 2 + 3 * 4 - 7 * 12 / k + k;
-	a = a + 1 -3 - 7;
+	int b, k = 1;
+	int kb = k + 100;
+{int k =1;}
+int yu = 100;
+	b = kb / b * 10 + 2;
 }
 
 int func2 ()
 {
-	int k2 = 2 * (-12 - 1), b2;
-	a = 2 + 3 * 4 - 7 * 12 / k2 + k2;
-	a = a + 1 -3 - 7;
+	int a = 0;
+	int sum = a + a + a;
+	b = sum - a * 4;
 }
 
-
-/*int a;
-short b, h, g = 12;
-
-int jk()
+int func3 ()
 {
-	long n;
-float k2;
-short k;
-
-	return 100;
+	a = b + c * a - b / c;
 }
-
-
-int j()
-{
-	long n = 2+ 1, fh = 3;
-float k2;
-short k;
-	{float a = 1, b = 12, n = 121; {int n = 32; long n5 = 5+ 1, fh = 3; }}
-
-	return 100;
-}
-
-int k = 2, m = 20;
-
-int main()
-{
-	return 0;
-}
-
-float rq = 121.1;*/
